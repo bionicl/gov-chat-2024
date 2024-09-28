@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Deklaracja xmlns="http://crd.gov.pl/wzor/2023/12/13/13064/">
+  <Naglowek>
+    <KodFormularza kodSystemowy="PCC-3 (6)" kodPodatku="PCC" rodzajZobowiazania="Z" wersjaSchemy="1-0E">PCC-3</KodFormularza>
+    <WariantFormularza>6</WariantFormularza>
+    <CelZlozenia poz="P_6">1</CelZlozenia>
+    <Data poz="P_4">2024-09-12</Data>
+    <KodUrzedu>1471</KodUrzedu>
+  </Naglowek>
+  <Podmiot1 rola="Podatnik">
+    <OsobaFizyczna>
+      <PESEL>72042841923</PESEL>
+      <ImiePierwsze>RADOSŁAW</ImiePierwsze>
+      <Nazwisko>KOWALSKI</Nazwisko>
+      <DataUrodzenia>1972-04-28</DataUrodzenia>
+      <ImieOjca>JANEK</ImieOjca>
+      <ImieMatki>BEATA</ImieMatki>
+    </OsobaFizyczna>
+    <AdresZamieszkaniaSiedziby rodzajAdresu="RAD">
+      <AdresPol>
+        <KodKraju>PL</KodKraju>
+        <Wojewodztwo>MAZOWIECKIE</Wojewodztwo>
+        <Powiat>BIAŁOBRZESKI</Powiat>
+        <Gmina>PROMNA</Gmina>
+        <Ulica>PODŁUŻNA</Ulica>
+        <NrDomu>30E</NrDomu>
+        <Miejscowosc>WARSZAWA</Miejscowosc>
+        <KodPocztowy>23-290</KodPocztowy>
+      </AdresPol>
+    </AdresZamieszkaniaSiedziby>
+  </Podmiot1>
+  <PozycjeSzczegolowe>
+    <P_7>1</P_7>
+    <P_20>1</P_20>
+    <P_21>1</P_21>
+    <P_22>1</P_22>
+    <P_23>Czynności cywilnoprawne to działania, które wywołują skutki prawne w ramach prawa cywilnego. Treścią czynności cywilnoprawnej jest to, co strony umowy postanawiają zrobić, czyli ich wzajemne zobowiązania i uprawnienia. Przedmiotem czynności cywilnoprawnej są natomiast dobra lub prawa, które są przedmiotem tych działań.
+
+Na przykład w umowie sprzedaży treścią czynności jest zobowiązanie sprzedawcy do przeniesienia własności rzeczy na kupującego, a przedmiotem umowy jest konkretna rzecz, która ma być sprzedana, np. samochód. Z kolei w umowie najmu treścią jest zobowiązanie wynajmującego do oddania lokalu do używania najemcy, a przedmiotem jest wynajmowany lokal.
+
+Podsumowując, zwięzłe określenie treści i przedmiotu czynności cywilnoprawnej powinno jasno wskazywać, jakie działania są podejmowane oraz na jakie dobra lub prawa te działania oddziałują.</P_23>
+    <P_24>3000</P_24>
+    <P_25>30</P_25>
+    <P_26>3000</P_26>
+    <P_27>60</P_27>
+    <P_46>90</P_46>
+    <P_53>90</P_53>
+    <P_62>1</P_62>
+  </PozycjeSzczegolowe>
+  <Pouczenia>1</Pouczenia>
+</Deklaracja>
