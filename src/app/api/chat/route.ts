@@ -66,5 +66,4 @@ export async function POST(req: Request) {
 		status: 200,
 		headers: { "Content-Type": "application/json" },
 	});
-	// res.status(200).json({ response })
 }
