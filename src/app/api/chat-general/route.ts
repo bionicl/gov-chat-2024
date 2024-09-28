@@ -23,8 +23,10 @@ export async function POST(req: Request) {
 				...props.previousInput,
 				{
 					role: "system",
-					content: `Your task is to gather information from the user needed to 
-						fill JSON object userForm in the most efficient, friendly 
+					content:
+						`Your task is to gather information from the user needed to 
+						fill JSON object userForm in alignement with field descriptions 
+						and in the most efficient, friendly 
 						and convenient for user way. If information for object in 
 						form was not found and cannot be reasoned from answer leave 
 						that object in json empty. Conversation will be in Polish 
@@ -158,52 +160,44 @@ export async function POST(req: Request) {
 									},
 									p4: {
 										type: "string",
-										description: "Additional field 4",
+										description: "DATA DOKONANIA CZYNNOŚCI",
 									},
 									p6: {
 										type: "string",
-										description: "Additional field 6",
+										description: "CEL ZŁOŻENIA DEKLARACJI",
 									},
 									p7: {
 										type: "string",
-										description: "Additional field 7",
+										description: "PODMIOT SKŁADAJĄCY DEKLARACJĘ",
 									},
 									p20: {
 										type: "string",
-										description: "Additional field 20",
+										description: "PRZEDMIOT OPODATKOWANIA",
 									},
 									p21: {
 										type: "string",
-										description: "Additional field 21",
+										description: "Miejsce położenia rzeczy lub miejsce wykonywania prawa majątkowego. Musi przyjmować wartość: 0 (jest niewypełnione), 1 (terytorium RP) lub 2 (poza terytorium RP),",
 									},
 									p22: {
 										type: "string",
-										description: "Additional field 22",
+										description: "MIEJSCE DOKONANIA CZYNNOŚCI CYWILNOPRAWNEJ. Musi przyjmować wartość: 0 (jest niewypełnione), 1 (terytorium RP) lub 2 (poza terytorium RP).",
 									},
 									p23: {
 										type: "string",
-										description: "Additional field 23",
+										description: "ZWIĘZŁE OKREŚLENIE TREŚCI I PRZEDMIOTU CZYNNOŚCI CYWILNOPRAWNEJ. Tekstowe (należy podać markę, model samochodu, rok produkcji i inne istotne informacje o stanie technicznym)",
 									},
 									p26: {
 										type: "string",
-										description: "Additional field 26",
-									},
-									p27: {
-										type: "string",
-										description: "Additional field 27",
-									},
-									p46: {
-										type: "string",
-										description: "Additional field 46",
-									},
-									p53: {
-										type: "string",
-										description: "Additional field 53",
+										description: "PODSTAWA OPODATKOWANIA DLA UMOWY SPRZEDAŻY. Musi być większa lub równa 1000 PLN (jeśli nie jest to cały formularz nie jest potrzebny) oraz podana po zaokrągleniu do pełnych złotych.",
 									},
 									p62: {
 										type: "string",
-										description: "Additional field 62",
+										description: "LICZBA DOŁĄCZONYCH ZAŁĄCZNIKÓW PCC-3/A",
 									},
+									pouczenia: {
+										type: "string",
+										description: "(Potwierdzam i akceptuję pouczenia). Musi przyjmować wartość 1 aby wniosek był poprawny. Zapytaj czy użytkownik akceptuje pouczenia"
+									}
 								},
 								required: [
 									"celZlozenia",
