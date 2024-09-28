@@ -30,4 +30,5 @@ export type AdditionalDataUserFormData = {
 	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
 	response_message: string;
 	userFormData: FormUserData;
+	nextMode: string;
 };
