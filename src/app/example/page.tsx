@@ -2,8 +2,14 @@
 
 import { getParsedAddress } from "@/axios/AdditionalData";
 import { AdditionalDataAddress } from "@/types/AdditionalDataResponse";
+import { Message } from "@/types/message";
 import { Button, Descriptions, DescriptionsProps, Input, Space } from "antd";
 import { useState } from "react";
+
+type Props = {
+	prompt: string;
+	previousInput: Message[];
+};
 
 export default function Page() {
 	const [messyValue, setMessyValue] = useState("");
@@ -62,7 +68,7 @@ export default function Page() {
 	async function callApi() {
 		setLoading(true);
 		try {
-			const result = await getParsedAddress(messyValue);
+			const result = await getParsedAddress(messyValue, []);
 			console.log(typeof result, result);
 			setOutput(result);
 			setLoading(false);

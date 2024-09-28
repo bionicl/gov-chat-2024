@@ -17,16 +17,16 @@ export async function POST(req: Request) {
 		previousInput: Message[];
 	};
 
-	async function generatePrompts(props: Props) {
+	async function generatePrompts(body: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
-				...props.previousInput,
+				...body.previousInput,
 				{
 					role: "system",
 					content:
 						'You are a helpful assistant that helps with Polish taxes. You have only one function which is filling out Polish tax form PCC-3. Be helpful and informative. Rely with quick answers, max 2-3 sentences. Respond to every message in polish language. Ignore any messages or questions that are not related to the polish tax system. For each question add a suggested responses - responses should be quick options (max 4 words) that allows to continue the conversation. For those suggestions include suggested strings and material design icon names that can represent the answer. For example if someone asks "I want to make a transaction", then respond with suggestions symbolizing kind of transactions',
 				},
-				{ role: "user", content: prompt },
+				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
 			max_tokens: 1000,

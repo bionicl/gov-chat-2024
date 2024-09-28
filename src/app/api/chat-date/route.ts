@@ -9,7 +9,7 @@ type Props = {
 };
 
 export async function POST(req: Request) {
-	const body = await req.json();
+	const body: Props = await req.json();
 
 	const { prompt } = body;
 
@@ -17,16 +17,16 @@ export async function POST(req: Request) {
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(props: Props) {
+	async function generatePrompts(body: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
-				...props.previousInput,
+				...body.previousInput,
 				{
 					role: "system",
 					content:
 						"Your only goal is to collect full user birth date. Then output it in the sttructured JSON format. User needs to input rok, miesiac and dzien. If any of those fields are not provided, then output additional message in polish that indicates which data is missing. Try to help with filling out some data. If you're unsure but all values are filled, please set success_but_unsure status. Provide response_message only if response was failed. If provided data if wrong (for example prodived month doesn't exist or day at provided year and month doesn't exist), try to fix it or return failed status and notify in the message.",
 				},
-				{ role: "user", content: prompt },
+				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
 			max_tokens: 1000,
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
 		return response;
 	}
 
-	const response = await generatePrompts(prompt);
+	const response = await generatePrompts(body);
 	const essence = response.choices[0].message.content;
 	return new Response(JSON.stringify(essence), {
 		status: 200,
