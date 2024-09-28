@@ -1,4 +1,4 @@
-export type FormData = {
+export type FormUserData = {
 	celZlozenia: string;
 	dataZlozenia: string;
 	kodUrzedu: string;
@@ -21,15 +21,15 @@ export type FormData = {
 		kodPocztowy: string;
 	};
 	p4: string;
-	p6: number;
-	p7: number;
-	p20: number;
-	p21: number;
-	p22: number;
+	p6: string;
+	p7: string;
+	p20: string;
+	p21: string;
+	p22: string;
 	p23: string;
-	p26: number;
-	p27: number;
-	p46: number;
-	p53: number;
-	p62: number;
+	p26: string;
+	p27: string;
+	p46: string;
+	p53: string;
+	p62: string;
 };

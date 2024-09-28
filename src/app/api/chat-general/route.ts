@@ -129,23 +129,23 @@ export async function POST(req: Request) {
 								description: "Additional field 4",
 							},
 							p6: {
-								type: "number",
+								type: "string",
 								description: "Additional field 6",
 							},
 							p7: {
-								type: "number",
+								type: "string",
 								description: "Additional field 7",
 							},
 							p20: {
-								type: "number",
+								type: "string",
 								description: "Additional field 20",
 							},
 							p21: {
-								type: "number",
+								type: "string",
 								description: "Additional field 21",
 							},
 							p22: {
-								type: "number",
+								type: "string",
 								description: "Additional field 22",
 							},
 							p23: {
@@ -153,23 +153,23 @@ export async function POST(req: Request) {
 								description: "Additional field 23",
 							},
 							p26: {
-								type: "number",
+								type: "string",
 								description: "Additional field 26",
 							},
 							p27: {
-								type: "number",
+								type: "string",
 								description: "Additional field 27",
 							},
 							p46: {
-								type: "number",
+								type: "string",
 								description: "Additional field 46",
 							},
 							p53: {
-								type: "number",
+								type: "string",
 								description: "Additional field 53",
 							},
 							p62: {
-								type: "number",
+								type: "string",
 								description: "Additional field 62",
 							},
 						},

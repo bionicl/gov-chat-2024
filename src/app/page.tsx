@@ -1,7 +1,8 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedAddress } from "@/axios/AdditionalData";
+import { getParsedUserFormData } from "@/axios/AdditionalData";
 import ChatMessage from "@/components/ChatMessage";
+import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
 import {
 	Button,
@@ -21,13 +22,24 @@ export default function Home() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [formData, setFormData] = useState<Partial<FormData>>({});
+	const [formData, setFormData] = useState<Partial<FormUserData>>({});
+
+	function updateFormData(valuesFromGpt : FormUserData){
+		let modifiedFormData = structuredClone(formData);
+
+		if (valuesFromGpt.p20 != ""){
+			modifiedFormData.p20 == valuesFromGpt.p20;
+		}
+		
+		setFormData(modifiedFormData)
+	}
 
 	async function callApi(message: string) {
 		setLoading(true);
 		try {
-			const result = await getParsedAddress(message);
-			newAssistantMessage(result.address.kraj ?? "Nie wiem");
+			const result = await getParsedUserFormData(message);
+			updateFormData(result?.userFormData)
+			newAssistantMessage("Nie wiem");
 		} catch (error: any) {
 			console.error(error);
 			setLoading(false);
