@@ -18,3 +18,9 @@ export type AdditionalDataNeedsPCCForm = {
 	response_message: string;
 	doesNeedThisForm: boolean;
 };
+
+export type AdditionalDataLearnMore = {
+	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
+	response_message: string;
+	href: string;
+};
