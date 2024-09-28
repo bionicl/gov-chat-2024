@@ -1,3 +1,4 @@
+import { Message } from "@/types/message";
 import { OpenAI } from "openai";
 
 const OPENAI_API_KEY = process.env.OPEN_AI_KEY;
@@ -70,23 +71,27 @@ jeden z zamienianych przedmiotów.", odpowiedz użytkownikowi który formularz p
 
 `;
 
-export async function POST(req: Request) {
-	const body = await req.json();
+type Props = {
+	prompt: string;
+	previousInput: Message[];
+};
 
-	const { prompt } = body;
+export async function POST(req: Request) {
+	const body: Props = await req.json();
 
 	const openai = new OpenAI({
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(prompt: string) {
+	async function generatePrompts(body: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
+				...body.previousInput,
 				{
 					role: "system",
 					content: systemMessage,
 				},
-				{ role: "user", content: prompt },
+				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
 			max_tokens: 1000,
@@ -124,7 +129,7 @@ export async function POST(req: Request) {
 		return response;
 	}
 
-	const response = await generatePrompts(prompt);
+	const response = await generatePrompts(body);
 	const essence = response.choices[0].message.content;
 	return new Response(JSON.stringify(essence), {
 		status: 200,

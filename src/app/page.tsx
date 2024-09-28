@@ -14,6 +14,7 @@ import { useState } from "react";
 
 export default function Home() {
 	const [messages, setMessages] = useState<Message[]>([]);
+	const [currentModeMessages, setCurrentModeMessages] = useState<Message[]>([]);
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState<Partial<FormUserData>>({});
@@ -28,6 +29,9 @@ export default function Home() {
 
 	function addNewMessage(role: "assistant" | "user", content: string) {
 		setMessages((prevMessages) => {
+			return [...prevMessages, { role, content }];
+		});
+		setCurrentModeMessages((prevMessages) => {
 			return [...prevMessages, { role, content }];
 		});
 	}
@@ -50,17 +54,25 @@ export default function Home() {
 		setLoading(true);
 		try {
 			if (mode === "start") {
-				const result = await getParsedNeedPCCForm(message);
+				const result = await getParsedNeedPCCForm(message, currentModeMessages);
 				addNewMessage("assistant", result?.response_message);
+				setLoading(false);
 				if (result.doesNeedThisForm) {
 					setMode("default");
+					setLoading(true);
+					const result = await getParsedUserFormData(
+						"Chciałbym kupić samochód. Czy możesz pomóc mi wypełnić formularz pcc-3?",
+						[]
+					);
+					addNewMessage("assistant", result?.response_message);
+					setLoading(false);
 				}
 			}
-			const result = await getParsedUserFormData(message);
-			updateFormData(result?.userFormData);
-			console.log(result?.userFormData);
-			addNewMessage("assistant", result?.response_message);
-			setLoading(false);
+			// const result = await getParsedUserFormData(message);
+			// updateFormData(result?.userFormData);
+			// console.log(result?.userFormData);
+			// addNewMessage("assistant", result?.response_message);
+			// setLoading(false);
 		} catch (error: any) {
 			console.error(error);
 			setLoading(false);

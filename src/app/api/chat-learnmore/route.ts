@@ -1,3 +1,4 @@
+import { Message } from "@/types/message";
 import { OpenAI } from "openai";
 
 const OPENAI_API_KEY = process.env.OPEN_AI_KEY;
@@ -42,8 +43,12 @@ opis: "Rozliczenie podatku SD od innego sposobu nabycia majatku. Nabyłeś włas
 link: "https://www.podatki.gov.pl/" 
 opis: "Inne, ogólne przypadki jeśli nie pasuje żadna inna strona"
 }
-`
+`;
 
+type Props = {
+	prompt: string;
+	previousInput: Message[];
+};
 
 export async function POST(req: Request) {
 	const body = await req.json();
@@ -54,15 +59,15 @@ export async function POST(req: Request) {
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(prompt: string) {
+	async function generatePrompts(props: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
+				...props.previousInput,
 				{
 					role: "system",
-					content:
-						systemMessage,
+					content: systemMessage,
 				},
-				{ role: "user", content: prompt },
+				{ role: "user", content: props.prompt },
 			],
 			model: "gpt-4o-mini",
 			max_tokens: 1000,

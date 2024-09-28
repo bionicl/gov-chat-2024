@@ -1,6 +1,12 @@
+import { Message } from "@/types/message";
 import { OpenAI } from "openai";
 
 const OPENAI_API_KEY = process.env.OPEN_AI_KEY;
+
+type Props = {
+	prompt: string;
+	previousInput: Message[];
+};
 
 export async function POST(req: Request) {
 	const body = await req.json();
@@ -11,9 +17,10 @@ export async function POST(req: Request) {
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(prompt: string) {
+	async function generatePrompts(props: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
+				...props.previousInput,
 				{
 					role: "system",
 					content:
@@ -56,11 +63,7 @@ export async function POST(req: Request) {
 										type: "string",
 									},
 								},
-								required: [
-									"rok",
-									"miesiac",
-									"dzien",
-								],
+								required: ["rok", "miesiac", "dzien"],
 								additionalProperties: false,
 							},
 						},
