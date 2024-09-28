@@ -50,7 +50,7 @@ export default function ChatArea(props: Props) {
 							level={3}
 							style={{
 								marginTop: 32,
-								fontFamily: "Montserrat, sans-serif",
+
 								fontWeight: 700,
 								textAlign: "center",
 							}}

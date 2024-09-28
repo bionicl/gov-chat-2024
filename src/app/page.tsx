@@ -6,6 +6,7 @@ import {
 	getParsedUserFormData,
 } from "@/axios/AdditionalData";
 import ChatArea from "@/components/ChatArea";
+import FormDetailsArea from "@/components/FormDetailsArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
 import { downloadXML, generateXML } from "@/lib/xmlExport";
@@ -88,7 +89,7 @@ export default function Home() {
 				updateFormData(result?.userFormData);
 				setLoading(false);
 
-				if (result?.nextMode == "finished"){
+				if (result?.nextMode == "finished") {
 					const xmlString = generateXML(formData);
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
@@ -133,6 +134,8 @@ export default function Home() {
 		callApi(inputMessage);
 	}
 
+	const isStartMode = mode === "start";
+
 	return (
 		<>
 			<TopBar />
@@ -142,22 +145,25 @@ export default function Home() {
 				justify="center"
 				style={{ height: "calc(100vh - 96px)", width: "100vw" }}
 			>
-				<Card
-					style={{
-						width: 600,
-						height: "calc(100% - 96px)",
-						position: "relative",
-					}}
-					bordered={false}
-				>
-					<ChatArea messages={messages} loading={loading} explain={explain} />
-					<InputArea
-						inputMessage={inputMessage}
-						setInputMessage={setInputMessage}
-						loading={loading}
-						userActionAskQuestion={userActionAskQuestion}
-					/>
-				</Card>
+				<Flex gap={16}>
+					{!isStartMode && <FormDetailsArea />}
+					<Card
+						style={{
+							width: isStartMode ? 600 : 450,
+							height: "calc(100% - 96px)",
+							position: "relative",
+						}}
+						bordered={false}
+					>
+						<ChatArea messages={messages} loading={loading} explain={explain} />
+						<InputArea
+							inputMessage={inputMessage}
+							setInputMessage={setInputMessage}
+							loading={loading}
+							userActionAskQuestion={userActionAskQuestion}
+						/>
+					</Card>
+				</Flex>
 			</Flex>
 		</>
 	);
