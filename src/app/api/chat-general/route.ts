@@ -17,7 +17,15 @@ export async function POST(req: Request) {
 				{
 					role: "system",
 					content:
-						"Your only goal is to collect user address. It needs to be address in Poland. Then output it in the sttructured JSON format. User needs to input Powiat, Gmina, Miejscowośc, Street (optional), home number and optional room number and postal code. If any of those fields are not provided, then output additional message in polish that indicates which data is missing. Try to help with filling out some data. For example if user provides a big city, autofill powiat/gmina/wojewódźtwo but only if you are 100% sure. If you fill them out automatically, but you're unsure, please set success_but_unsure status. Provide response_message only if response was failed. If provided data if wrong (for example kod pocztowy is longer than 5 characters), try to fix it or return failed status and notify in the message. If Kod pocztowy is provided without the - character, fill it out with the correct format 00-000. Kraj, Województwo, Powiat and Gmina, output always in UPPERLETTERS.",
+						`Your task is to gather information from the user needed to 
+						fill JSON object userForm in the most efficient, friendly 
+						and convenient for user way. If information for object in 
+						form was not found and cannot be reasoned from answer leave 
+						that object in json empty. Conversation will be in Polish 
+						and please answer in Polish. You can only talk about topics 
+						related to taxes. If information from user you need is about
+						his birth date, address or he asks for knowledge about some topic,
+						then set nextMove value in JSON with appropriate value.`,
 				},
 				{ role: "user", content: prompt },
 			],
@@ -29,170 +37,184 @@ export async function POST(req: Request) {
 					name: "response",
 					strict: true,
 					schema: {
+						nextMode: {
+							type: "string",
+							enum: [
+								"default",
+								"birthDateCollection",
+								"addressCollection",
+								"learnMore",
+							],
+						},
 						type: "object",
 						properties: {
-							celZlozenia: {
-								type: "string",
-								description: "Purpose of the submission",
-							},
-							dataZlozenia: {
-								type: "string",
-								description: "Date of submission (format: YYYY-MM-DD)",
-							},
-							kodUrzedu: {
-								type: "string",
-								description: "Office code",
-							},
-							osobaFizyczna: {
+							userForm: {
 								type: "object",
 								properties: {
-									PESEL: {
+									celZlozenia: {
 										type: "string",
-										description:
-											"PESEL number (personal identification number)",
+										description: "Purpose of the submission",
 									},
-									NIP: {
+									dataZlozenia: {
 										type: "string",
-										description: "NIP number (tax identification number)",
+										description: "Date of submission (format: YYYY-MM-DD)",
 									},
-									imie: {
+									kodUrzedu: {
 										type: "string",
-										description: "First name",
+										description: "Office code",
 									},
-									nazwisko: {
-										type: "string",
-										description: "Last name",
+									osobaFizyczna: {
+										type: "object",
+										properties: {
+											PESEL: {
+												type: "string",
+												description:
+													"PESEL number (personal identification number)",
+											},
+											NIP: {
+												type: "string",
+												description: "NIP number (tax identification number)",
+											},
+											imie: {
+												type: "string",
+												description: "First name",
+											},
+											nazwisko: {
+												type: "string",
+												description: "Last name",
+											},
+											dataUrodzenia: {
+												type: "string",
+												description: "Date of birth (format: YYYY-MM-DD)",
+											},
+										},
+										required: ["PESEL", "NIP", "imie", "nazwisko", "dataUrodzenia"],
+										description: "Details of a physical person",
 									},
-									dataUrodzenia: {
-										type: "string",
-										description: "Date of birth (format: YYYY-MM-DD)",
+									adresZamieszkaniaSiedziby: {
+										type: "object",
+										properties: {
+											kodKraju: {
+												type: "string",
+												description: "Country code",
+											},
+											wojewodztwo: {
+												type: "string",
+												description: "Province",
+											},
+											powiat: {
+												type: "string",
+												description: "District",
+											},
+											gmina: {
+												type: "string",
+												description: "Municipality",
+											},
+											miejscowosc: {
+												type: "string",
+												description: "Locality",
+											},
+											ulica: {
+												type: "string",
+												description: "Street",
+											},
+											nrDomu: {
+												type: "string",
+												description: "House number",
+											},
+											nrLokalu: {
+												type: "string",
+												description: "Apartment number",
+											},
+											kodPocztowy: {
+												type: "string",
+												description: "Postal code",
+											},
+										},
+										required: [
+											"kodKraju",
+											"wojewodztwo",
+											"powiat",
+											"gmina",
+											"miejscowosc",
+											"ulica",
+											"nrDomu",
+											"nrLokalu",
+											"kodPocztowy",
+										],
+										description: "Residential or registered office address",
 									},
-								},
-								required: ["PESEL", "NIP", "imie", "nazwisko", "dataUrodzenia"],
-								description: "Details of a physical person",
-							},
-							adresZamieszkaniaSiedziby: {
-								type: "object",
-								properties: {
-									kodKraju: {
+									p4: {
 										type: "string",
-										description: "Country code",
+										description: "Additional field 4",
 									},
-									wojewodztwo: {
+									p6: {
 										type: "string",
-										description: "Province",
+										description: "Additional field 6",
 									},
-									powiat: {
+									p7: {
 										type: "string",
-										description: "District",
+										description: "Additional field 7",
 									},
-									gmina: {
+									p20: {
 										type: "string",
-										description: "Municipality",
+										description: "Additional field 20",
 									},
-									miejscowosc: {
+									p21: {
 										type: "string",
-										description: "Locality",
+										description: "Additional field 21",
 									},
-									ulica: {
+									p22: {
 										type: "string",
-										description: "Street",
+										description: "Additional field 22",
 									},
-									nrDomu: {
+									p23: {
 										type: "string",
-										description: "House number",
+										description: "Additional field 23",
 									},
-									nrLokalu: {
+									p26: {
 										type: "string",
-										description: "Apartment number",
+										description: "Additional field 26",
 									},
-									kodPocztowy: {
+									p27: {
 										type: "string",
-										description: "Postal code",
+										description: "Additional field 27",
+									},
+									p46: {
+										type: "string",
+										description: "Additional field 46",
+									},
+									p53: {
+										type: "string",
+										description: "Additional field 53",
+									},
+									p62: {
+										type: "string",
+										description: "Additional field 62",
 									},
 								},
 								required: [
-									"kodKraju",
-									"wojewodztwo",
-									"powiat",
-									"gmina",
-									"miejscowosc",
-									"ulica",
-									"nrDomu",
-									"nrLokalu",
-									"kodPocztowy",
+									"celZlozenia",
+									"dataZlozenia",
+									"kodUrzedu",
+									"osobaFizyczna",
+									"adresZamieszkaniaSiedziby",
+									"p4",
+									"p6",
+									"p7",
+									"p20",
+									"p21",
+									"p22",
+									"p23",
+									"p26",
+									"p27",
+									"p46",
+									"p53",
+									"p62",
 								],
-								description: "Residential or registered office address",
-							},
-							p4: {
-								type: "string",
-								description: "Additional field 4",
-							},
-							p6: {
-								type: "string",
-								description: "Additional field 6",
-							},
-							p7: {
-								type: "string",
-								description: "Additional field 7",
-							},
-							p20: {
-								type: "string",
-								description: "Additional field 20",
-							},
-							p21: {
-								type: "string",
-								description: "Additional field 21",
-							},
-							p22: {
-								type: "string",
-								description: "Additional field 22",
-							},
-							p23: {
-								type: "string",
-								description: "Additional field 23",
-							},
-							p26: {
-								type: "string",
-								description: "Additional field 26",
-							},
-							p27: {
-								type: "string",
-								description: "Additional field 27",
-							},
-							p46: {
-								type: "string",
-								description: "Additional field 46",
-							},
-							p53: {
-								type: "string",
-								description: "Additional field 53",
-							},
-							p62: {
-								type: "string",
-								description: "Additional field 62",
-							},
-						},
-						required: [
-							"celZlozenia",
-							"dataZlozenia",
-							"kodUrzedu",
-							"osobaFizyczna",
-							"adresZamieszkaniaSiedziby",
-							"p4",
-							"p6",
-							"p7",
-							"p20",
-							"p21",
-							"p22",
-							"p23",
-							"p26",
-							"p27",
-							"p46",
-							"p53",
-							"p62",
-						],
-						description: "Form data for a specific submission process",
+								description: "Form data for a specific submission process",
+							}
+						}
 					},
 				},
 			},

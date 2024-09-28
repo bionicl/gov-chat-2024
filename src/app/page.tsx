@@ -17,9 +17,14 @@ export default function Home() {
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState<Partial<FormUserData>>({});
-	const [mode, setMode] = useState<"start" | "gatherData" | "finished">(
-		"start"
-	);
+	const [mode, setMode] = useState<
+		| "start"
+		| "default"
+		| "birthDateCollection"
+		| "addressCollection"
+		| "learnMore"
+		| "finished"
+	>("start");
 
 	function addNewMessage(role: "assistant" | "user", content: string) {
 		setMessages((prevMessages) => {
@@ -30,10 +35,14 @@ export default function Home() {
 	function updateFormData(valuesFromGpt: FormUserData) {
 		let modifiedFormData = structuredClone(formData);
 
-		if (valuesFromGpt.p20 != "") {
-			modifiedFormData.p20 == valuesFromGpt.p20;
+		// Loop through all elements and override any with non empty strings
+		for (const key in valuesFromGpt) {
+			const castKey = key as keyof FormUserData;
+			const value = valuesFromGpt[castKey];
+			if (value != "") {
+				modifiedFormData[castKey] = value;
+			}
 		}
-
 		setFormData(modifiedFormData);
 	}
 
@@ -44,12 +53,13 @@ export default function Home() {
 				const result = await getParsedNeedPCCForm(message);
 				addNewMessage("assistant", result?.response_message);
 				if (result.doesNeedThisForm) {
-					setMode("gatherData");
+					setMode("default");
 				}
 			}
 			const result = await getParsedUserFormData(message);
-			// addNewMessage("assistant", result?.userFormData);
 			updateFormData(result?.userFormData);
+			console.log(result?.userFormData);
+			addNewMessage("assistant", result?.response_message);
 			setLoading(false);
 		} catch (error: any) {
 			console.error(error);
