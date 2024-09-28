@@ -24,8 +24,9 @@ export type FormUserData = {
 	p22: string;
 	p23: string;
 	p26: string;
-	p27: string;
-	p46: string;
-	p53: string;
+	p27: string; // calculate based on p26 * 2%
+	p46: string; // = p27
+	p53: string; // KWOTA PODATKU DO ZAPŁATY, WYLICZENIE=ROUN(P46, 0)
 	p62: string;
+	pouczenia: string; // POUCZENIA musi przyjmować wartość: 1 (Potwierdzam i akceptuję pouczenia)
 };
