@@ -1,6 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedAddress } from "@/axios/additionalData";
+import { getParsedAddress } from "@/axios/AdditionalData";
 import ChatMessage from "@/components/ChatMessage";
 import { Message } from "@/types/message";
 import {
