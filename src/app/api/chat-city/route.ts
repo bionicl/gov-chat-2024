@@ -60,13 +60,13 @@ export async function POST(req: Request) {
                             "ulica": {
                                 "type": "string"
                             },
-                            "numerDomu": {
+                            "numer_domu": {
                                 "type": "string"
                             },
-                            "numerMieszkania": {
+                            "numer_mieszkania": {
                                 "type": "string"
                             },
-                            "kodPocztowy": {
+                            "kod_pocztowy": {
                                 "type": "string"
                             }
                         },
@@ -77,9 +77,9 @@ export async function POST(req: Request) {
                             "gmina",
                             "miejscowosc",
                             "ulica",
-                            "numerDomu",
-                            "numerMieszkania",
-                            "kodPocztowy"
+                            "numer_domu",
+                            "numer_mieszkania",
+                            "kod_pocztowy"
                         ],
                         "additionalProperties": false
                     }
@@ -95,7 +95,8 @@ export async function POST(req: Request) {
   }
 
   const response = await generatePrompts(prompt);
-  return new Response(JSON.stringify(response), {
+  const essence = response.choices[0].message.content;
+  return new Response(JSON.stringify(essence), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
