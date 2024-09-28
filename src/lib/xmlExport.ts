@@ -1,8 +1,9 @@
+import { FormUserData } from "@/types/formData";
 import { XMLBuilder } from "fast-xml-parser";
 import fileDownload from "js-file-download";
 
 // Function to download XML using js-file-download
-function downloadXML(xmlString: string, fileName: string) {
+export function downloadXML(xmlString: string, fileName: string) {
 	fileDownload(xmlString, fileName);
 }
 
@@ -13,9 +14,8 @@ const builder = new XMLBuilder({
 });
 
 // Function to generate XML with the option to include OsobaFizyczna
-const generateXML = (includeOsobaFizyczna: boolean): string => {
+export const generateXML = (userForm: Partial<FormUserData>): string => {
 	// Construct the data object
-
 	const data: any = {
 		Deklaracja: {
 			"@_xmlns": "http://crd.gov.pl/wzor/2023/12/13/13064/", // Namespace
@@ -30,64 +30,57 @@ const generateXML = (includeOsobaFizyczna: boolean): string => {
 				WariantFormularza: "6",
 				CelZlozenia: {
 					"@_poz": "P_6",
-					"#text": "1",
+					"#text": userForm.p6,
 				},
 				Data: {
 					"@_poz": "P_4",
-					"#text": "2024-07-29",
+					"#text": userForm.p4,
 				},
-				KodUrzedu: "0271",
+				KodUrzedu: userForm.kodUrzedu,
 			},
 			Podmiot1: {
 				"@_rola": "Podatnik",
-				...(includeOsobaFizyczna
+				...(true // replace with includeOsobaFizyczna
 					? {
-							OsobaFizyczna: {
-								PESEL: "54121832134",
-								ImiePierwsze: "KAMIL",
-								Nazwisko: "WIRTUALNY",
-								DataUrodzenia: "1954-12-18",
-							},
-					  }
+						OsobaFizyczna: {
+							PESEL: userForm.osoba_PESEL,
+							ImiePierwsze: userForm.osoba_imie,
+							Nazwisko: userForm.osoba_nazwisko,
+							DataUrodzenia: userForm.osoba_dataUrodzenia,
+						},
+					}
 					: {}),
 				AdresZamieszkaniaSiedziby: {
 					"@_rodzajAdresu": "RAD",
 					AdresPol: {
-						KodKraju: "PL",
-						Wojewodztwo: "ŚLĄSKIE",
-						Powiat: "M. KATOWICE",
-						Gmina: "M. KATOWICE",
-						Ulica: "ALPEJSKA",
-						NrDomu: "6",
-						NrLokalu: "66",
-						Miejscowosc: "KATOWICE",
-						KodPocztowy: "66-666",
+						KodKraju: userForm.adres_kodKraju,
+						Wojewodztwo: userForm.adres_wojewodztwo,
+						Powiat: userForm.adres_powiat,
+						Gmina: userForm.adres_gmina,
+						Ulica: userForm.adres_ulica,
+						NrDomu: userForm.adres_nrDomu,
+						NrLokalu: userForm.adres_nrLokalu,
+						Miejscowosc: userForm.adres_miejscowosc,
+						KodPocztowy: userForm.adres_kodPocztowy,
 					},
 				},
 			},
 			PozycjeSzczegolowe: {
-				P_7: "2",
-				P_20: "1",
-				P_21: "1",
-				P_22: "1",
-				P_23: "Sprzedałem auto",
-				P_24: "10000",
-				P_25: "100",
-				P_46: "100",
-				P_53: "100",
-				P_62: "1",
+				P_7: userForm.p7,
+				P_20: userForm.p20,
+				P_21: userForm.p21,
+				P_22: userForm.p22,
+				P_23: userForm.p23,
+				P_26: userForm.p26,
+				P_27: userForm.p27,
+				P_46: userForm.p46,
+				P_53: userForm.p53,
+				P_62: userForm.p62,
 			},
-			Pouczenia: "1",
+			Pouczenia: userForm.pouczenia,
 		},
 	};
 
 	// Generate XML from the data object
 	return builder.build(data);
 };
-
-export function downloadTestXml() {
-	const xml1 = generateXML(true);
-	const xml2 = generateXML(false);
-	downloadXML(xml1, "withfizyczna.xml");
-	downloadXML(xml2, "withoutfizyczna.xml");
-}

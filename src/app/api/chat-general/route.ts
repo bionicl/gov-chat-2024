@@ -36,6 +36,8 @@ export async function POST(req: Request) {
 						After finished form, make sure to always output finalised JSON.
 						Limit each question about form data to minimum information to not overwhelm 
 						user at once and ensure that your responses are full and complete.
+						When asking for name or surname, and you don't already know, ask for 
+						full name (name + surname).
 						`,
 				},
 				{ role: "user", content: body.prompt },
@@ -60,22 +62,15 @@ export async function POST(req: Request) {
 							userForm: {
 								type: "object",
 								properties: {
-									celZlozenia: {
-										type: "string",
-										description: "Purpose of the submission",
-									},
-									dataZlozenia: {
-										type: "string",
-										description: "Date of submission (format: YYYY-MM-DD)",
-									},
+
 									kodUrzedu: {
 										type: "string",
-										description: "Office code",
+										description: "Office code. Pole obowiązkowe. Ważne pole.",
 									},
 									osoba_PESEL: {
 										type: "string",
 										description:
-											"PESEL number (personal identification number)",
+											"PESEL number (personal identification number). It absolutely has to be 11 digit integer number",
 									},
 									osoba_NIP: {
 										type: "string",
@@ -91,9 +86,8 @@ export async function POST(req: Request) {
 									},
 									osoba_dataUrodzenia: {
 										type: "string",
-										description: "Date of birth (format: YYYY-MM-DD)",
+										description: "Date of birth (format: YYYY-MM-DD) but ask user without any specific format (but internally convert it at output to (format: YYYY-MM-DD))",
 									},
-
 									adres_kodKraju: {
 										type: "string",
 										description: "Country code",
@@ -135,17 +129,13 @@ export async function POST(req: Request) {
 										type: "string",
 										description: "DATA DOKONANIA CZYNNOŚCI",
 									},
-									p6: {
-										type: "string",
-										description: "CEL ZŁOŻENIA DEKLARACJI",
-									},
 									p7: {
 										type: "string",
-										description: "PODMIOT SKŁADAJĄCY DEKLARACJĘ",
+										description: "PODMIOT SKŁADAJĄCY DEKLARACJĘ. Pole obowiązkowe. Musi przyjmować wartość: 1 (podmiot zobowiązany solidarnie do zapłaty podatku), lub 5 (inny podmiot).",
 									},
 									p20: {
 										type: "string",
-										description: "PRZEDMIOT OPODATKOWANIA",
+										description: "PRZEDMIOT OPODATKOWANIA. Pole obowiązkowe.",
 									},
 									p21: {
 										type: "string",
@@ -160,12 +150,12 @@ export async function POST(req: Request) {
 									p23: {
 										type: "string",
 										description:
-											"ZWIĘZŁE OKREŚLENIE TREŚCI I PRZEDMIOTU CZYNNOŚCI CYWILNOPRAWNEJ. Tekstowe (należy podać markę, model samochodu, rok produkcji i inne istotne informacje o stanie technicznym)",
+											"ZWIĘZŁE OKREŚLENIE TREŚCI I PRZEDMIOTU CZYNNOŚCI CYWILNOPRAWNEJ. Pole obowiązkowe. Tekstowe (należy podać markę, model samochodu, rok produkcji i inne istotne informacje o stanie technicznym)",
 									},
 									p26: {
 										type: "string",
 										description:
-											"PODSTAWA OPODATKOWANIA DLA UMOWY SPRZEDAŻY. Musi być większa lub równa 1000 PLN (jeśli nie jest to cały formularz nie jest potrzebny) oraz podana po zaokrągleniu do pełnych złotych.",
+											"PODSTAWA OPODATKOWANIA DLA UMOWY SPRZEDAŻY. Pole obowiązkowe. Musi być większa lub równa 1000 PLN (jeśli nie jest to cały formularz nie jest potrzebny) oraz podana po zaokrągleniu do pełnych złotych.",
 									},
 									p62: {
 										type: "string",
@@ -178,11 +168,8 @@ export async function POST(req: Request) {
 									},
 								},
 								required: [
-									"celZlozenia",
-									"dataZlozenia",
 									"kodUrzedu",
 									"p4",
-									"p6",
 									"p7",
 									"p20",
 									"p21",
