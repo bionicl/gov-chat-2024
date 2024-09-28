@@ -1,4 +1,5 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ConfigProvider } from "antd";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -27,7 +28,18 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				<AntdRegistry>{children}</AntdRegistry>
+				<AntdRegistry>
+					<ConfigProvider
+						theme={{
+							token: {
+								colorPrimary: "rgb(1, 84, 151)",
+								borderRadius: 4.8,
+							},
+						}}
+					>
+						{children}
+					</ConfigProvider>
+				</AntdRegistry>
 			</body>
 		</html>
 	);
