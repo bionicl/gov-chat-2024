@@ -34,6 +34,8 @@ export async function POST(req: Request) {
 						his birth date, address or he asks for knowledge about some topic,
 						then set nextMove value in JSON with appropriate value.
 						After finished form, make sure to always output finalised JSON.
+						Limit each question about form data to minimum information to not overwhelm 
+						user at once and ensure that your responses are full and complete.
 						`,
 				},
 				{ role: "user", content: body.prompt },
