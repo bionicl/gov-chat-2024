@@ -36,6 +36,7 @@ export async function POST(req: Request) {
 						After finished form, make sure to always output finalised JSON.
 						Limit each question about form data to minimum information to not overwhelm 
 						user at once and ensure that your responses are full and complete.
+						Today is date: ${new Date().toLocaleDateString("en-US")} (in US format)
 						`,
 				},
 				{ role: "user", content: body.prompt },

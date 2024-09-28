@@ -43,3 +43,14 @@ a {
     color-scheme: dark;
   }
 }
+
+.opacity-on-hover {
+	opacity: 0.3;
+	transition: 0.3s;
+	cursor: pointer;
+}
+
+.opacity-on-hover:hover {
+	opacity: 1;
+	transition: 0.3s;
+}

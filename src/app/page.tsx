@@ -1,6 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
 import {
+	getParsedLearnMore,
 	getParsedNeedPCCForm,
 	getParsedUserFormData,
 } from "@/axios/AdditionalData";
@@ -27,13 +28,19 @@ export default function Home() {
 		| "finished"
 	>("start");
 
-	function addNewMessage(role: "assistant" | "user", content: string) {
+	function addNewMessage(
+		role: "assistant" | "user",
+		content: string,
+		ignoreHistory: boolean
+	) {
 		setMessages((prevMessages) => {
 			return [...prevMessages, { role, content }];
 		});
-		setCurrentModeMessages((prevMessages) => {
-			return [...prevMessages, { role, content }];
-		});
+		if (!ignoreHistory) {
+			setCurrentModeMessages((prevMessages) => {
+				return [...prevMessages, { role, content }];
+			});
+		}
 	}
 
 	function updateFormData(valuesFromGpt: FormUserData) {
@@ -55,7 +62,7 @@ export default function Home() {
 		try {
 			if (mode === "start") {
 				const result = await getParsedNeedPCCForm(message, currentModeMessages);
-				addNewMessage("assistant", result?.response_message);
+				addNewMessage("assistant", result?.response_message, false);
 				setLoading(false);
 				if (result.doesNeedThisForm) {
 					setMode("default");
@@ -64,7 +71,7 @@ export default function Home() {
 						"Chciałbym kupić samochód. Czy możesz pomóc mi wypełnić formularz pcc-3?",
 						currentModeMessages
 					);
-					addNewMessage("assistant", result?.response_message);
+					addNewMessage("assistant", result?.response_message, false);
 					setLoading(false);
 				}
 			} else if (mode === "default") {
@@ -72,15 +79,30 @@ export default function Home() {
 					message,
 					currentModeMessages
 				);
-				addNewMessage("assistant", result?.response_message);
+				addNewMessage("assistant", result?.response_message, false);
 				updateFormData(result?.userFormData);
 				setLoading(false);
 			}
-			// const result = await getParsedUserFormData(message);
-			// updateFormData(result?.userFormData);
-			// console.log(result?.userFormData);
-			// addNewMessage("assistant", result?.response_message);
-			// setLoading(false);
+		} catch (error: any) {
+			console.error(error);
+			setLoading(false);
+		}
+	}
+
+	async function explain(content: string) {
+		setLoading(true);
+		try {
+			const result = await getParsedLearnMore(
+				"Wytłumacz tą kwestię: " + content,
+				currentModeMessages
+			);
+			let message = result?.response_message;
+			if (result?.href && result?.href !== "") {
+				message =
+					message + "\nDowiedz się więcej na tej stronie:\n" + result?.href;
+			}
+			addNewMessage("assistant", result?.response_message, true);
+			setLoading(false);
 		} catch (error: any) {
 			console.error(error);
 			setLoading(false);
@@ -93,7 +115,7 @@ export default function Home() {
 		}
 
 		// Add user message
-		addNewMessage("user", inputMessage);
+		addNewMessage("user", inputMessage, false);
 		setInputMessage("");
 
 		// Send API request
@@ -118,7 +140,7 @@ export default function Home() {
 					}}
 					bordered={false}
 				>
-					<ChatArea messages={messages} loading={loading} />
+					<ChatArea messages={messages} loading={loading} explain={explain} />
 					<InputArea
 						inputMessage={inputMessage}
 						setInputMessage={setInputMessage}
