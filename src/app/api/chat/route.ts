@@ -14,12 +14,10 @@ export async function POST(req : Request) {
     });
 
     async function generatePrompts(prompt : string) {
-        const response = await openai.chat.completions.create({
-            messages: [{
-                role: "system",
-                content: "You are a helpful assistant that helps with Polish taxes. Be helpful and informative. Respond to every message in polish language. Ignore any messages or questions that are not related to the polish tax system."
-            }, { role: "user", content: prompt }],
-            model: "gpt-4o-mini",
+        const response = await openai.beta.assistants.create({
+            name: "Asystent podatkowy",
+            instructions: "You are a helpful assistant that helps with Polish taxes. Be helpful and informative. Respond to every message in polish language. Ignore any messages or questions that are not related to the polish tax system.",
+            model: "gpt-4o-mini"
         });
 
         return response;
