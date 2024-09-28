@@ -51,7 +51,7 @@ type Props = {
 };
 
 export async function POST(req: Request) {
-	const body = await req.json();
+	const body: Props = await req.json();
 
 	const { prompt } = body;
 
@@ -59,15 +59,15 @@ export async function POST(req: Request) {
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(props: Props) {
+	async function generatePrompts(body: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
-				...props.previousInput,
+				...body.previousInput,
 				{
 					role: "system",
 					content: systemMessage,
 				},
-				{ role: "user", content: props.prompt },
+				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
 			max_tokens: 1000,
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
 		return response;
 	}
 
-	const response = await generatePrompts(prompt);
+	const response = await generatePrompts(body);
 	const essence = response.choices[0].message.content;
 	return new Response(JSON.stringify(essence), {
 		status: 200,

@@ -14,7 +14,7 @@ export async function getParsedAddress(
 	previousInput: Message[]
 ): Promise<AdditionalDataAddress> {
 	return await makeApiCall<AdditionalDataAddress>(() =>
-		axios.post("api/chat-city", { prompt: messyAddress })
+		axios.post("api/chat-city", { prompt: messyAddress, previousInput })
 	);
 }
 
@@ -23,7 +23,7 @@ export async function getParsedDate(
 	previousInput: Message[]
 ): Promise<AdditionalDataDate> {
 	return await makeApiCall<AdditionalDataDate>(() =>
-		axios.post("api/chat-date", { prompt: messyDate })
+		axios.post("api/chat-date", { prompt: messyDate, previousInput })
 	);
 }
 
@@ -41,7 +41,7 @@ export async function getParsedLearnMore(
 	previousInput: Message[]
 ): Promise<AdditionalDataLearnMore> {
 	return await makeApiCall<AdditionalDataLearnMore>(() =>
-		axios.post("api/chat-learnmore", { prompt: info })
+		axios.post("api/chat-learnmore", { prompt: info, previousInput })
 	);
 }
 
@@ -50,6 +50,6 @@ export async function getParsedUserFormData(
 	previousInput: Message[]
 ): Promise<AdditionalDataUserFormData> {
 	return await makeApiCall<AdditionalDataUserFormData>(() =>
-		axios.post("api/chat-learnmore", { prompt: input })
+		axios.post("api/chat-general", { prompt: input, previousInput })
 	);
 }

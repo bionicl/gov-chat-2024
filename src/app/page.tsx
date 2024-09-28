@@ -62,11 +62,19 @@ export default function Home() {
 					setLoading(true);
 					const result = await getParsedUserFormData(
 						"Chciałbym kupić samochód. Czy możesz pomóc mi wypełnić formularz pcc-3?",
-						[]
+						currentModeMessages
 					);
 					addNewMessage("assistant", result?.response_message);
 					setLoading(false);
 				}
+			} else if (mode === "default") {
+				const result = await getParsedUserFormData(
+					message,
+					currentModeMessages
+				);
+				addNewMessage("assistant", result?.response_message);
+				updateFormData(result?.userFormData);
+				setLoading(false);
 			}
 			// const result = await getParsedUserFormData(message);
 			// updateFormData(result?.userFormData);
