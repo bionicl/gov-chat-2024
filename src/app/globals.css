@@ -45,7 +45,7 @@ a {
 }
 
 .opacity-on-hover {
-	opacity: 0.3;
+	opacity: 0.6;
 	transition: 0.3s;
 	cursor: pointer;
 }

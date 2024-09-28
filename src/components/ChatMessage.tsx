@@ -1,6 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleFilled } from "@ant-design/icons";
 import { theme, Tooltip } from "antd";
 import React from "react";
 const { useToken } = theme;
@@ -78,7 +78,7 @@ export default function ChatMessage(props: Props) {
 			{props.content}
 			{props.role === "assistant" && props.content.length >= 5 && (
 				<Tooltip title="Wyjaśnij...">
-					<QuestionCircleOutlined
+					<QuestionCircleFilled
 						onClick={() => props.explain(props.content)}
 						className="opacity-on-hover"
 						style={{ marginLeft: 8 }}
