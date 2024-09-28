@@ -45,9 +45,8 @@ export default function Home() {
 		}
 	}
 
-	function updateFormData(valuesFromGpt: FormUserData) {
+	function getUpdatedFormData(valuesFromGpt: FormUserData) : Partial<FormUserData> {
 		let modifiedFormData = structuredClone(formData);
-
 		// Loop through all elements and override any with non empty strings
 		for (const key in valuesFromGpt) {
 			const castKey = key as keyof FormUserData;
@@ -59,8 +58,7 @@ export default function Home() {
 
 		// Consants for this case
 		modifiedFormData.p6 = "1"; // Cel złożenia deklaracji musi przyjmować wartość: 1 (złożenie deklaracji)
-
-		setFormData(modifiedFormData);
+		return modifiedFormData;
 	}
 
 	async function callApi(message: string) {
@@ -86,11 +84,12 @@ export default function Home() {
 					currentModeMessages
 				);
 				addNewMessage("assistant", result?.response_message, false);
-				updateFormData(result?.userFormData);
+				const newUserFormData = getUpdatedFormData(result?.userForm);
+				setFormData(newUserFormData);
 				setLoading(false);
 
-				if (result?.nextMode == "finished") {
-					const xmlString = generateXML(formData);
+				if (result?.nextMode == "finished"){
+					const xmlString = generateXML(newUserFormData);
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
 			}
