@@ -1,9 +1,20 @@
 "use client"; // This is a client component 👈🏽
 
 import ChatMessage from "@/components/ChatMessage";
-import { Button, Card, Flex, Image, Input, Space } from "antd";
+import { Button, Card, Flex, Form, Image, Input, Space } from "antd";
+import { useState } from "react";
 
 export default function Home() {
+	const [inputMessage, setInputMessage] = useState("");
+	const [loading, setLoading] = useState(false);
+
+	function submitMessage() {
+		if (loading) {
+			return;
+		}
+		setLoading(true);
+	}
+
 	return (
 		<>
 			<div
@@ -33,10 +44,20 @@ export default function Home() {
 				style={{ height: "calc(100vh - 96px)", width: "100vw" }}
 			>
 				<Card
-					style={{ width: 500, height: 600, position: "relative" }}
+					style={{
+						width: 600,
+						height: "calc(100% - 96px)",
+						position: "relative",
+					}}
 					bordered={false}
 				>
-					<div style={{ height: 500, overflowY: "scroll" }}>
+					<div
+						style={{
+							height: "calc(100vh - 96px - 96px - 48px - 16px - 40px)",
+							overflowY: "scroll",
+							overflowX: "hidden",
+						}}
+					>
 						<Space direction="vertical" style={{ width: "100%" }} size={40}>
 							<ChatMessage role={"user"} />
 							<ChatMessage role={"assistant"} />
@@ -54,16 +75,32 @@ export default function Home() {
 							<Card title="Test 6" style={{ width: "100%" }} /> */}
 						</Space>
 					</div>
-					<Input
-						variant="filled"
-						size="large"
-						placeholder="Zapytaj asystenta..."
-						style={{
-							width: 452,
-							marginTop: 16,
+					<Form
+						onFinish={() => {
+							submitMessage();
 						}}
-					/>
-					<Button type="primary">Test</Button>
+					>
+						<Flex gap={10} style={{ marginTop: 16, width: "100%" }}>
+							<Input
+								variant="filled"
+								size="large"
+								placeholder="Zapytaj asystenta..."
+								value={inputMessage}
+								onChange={(e) => setInputMessage(e.target.value)}
+								disabled={loading}
+							/>
+							{/* <Form.Item> */}
+							<Button
+								style={{ height: 40, paddingInline: 24 }}
+								type="primary"
+								disabled={loading || inputMessage.length === 0}
+								loading={loading}
+							>
+								Wyślij
+							</Button>
+							{/* </Form.Item> */}
+						</Flex>
+					</Form>
 				</Card>
 			</Flex>
 		</>
