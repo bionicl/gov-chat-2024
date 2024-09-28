@@ -1,5 +1,6 @@
 import { Address } from "./address";
 import { CalendarDate } from "./CalendarDate";
+import { FormUserData } from "./formData";
 
 export type AdditionalDataAddress = {
 	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
@@ -23,4 +24,10 @@ export type AdditionalDataLearnMore = {
 	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
 	response_message: string;
 	href: string;
+};
+
+export type AdditionalDataUserFormData = {
+	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
+	response_message: string;
+	userFormData: FormUserData;
 };

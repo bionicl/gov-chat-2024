@@ -1,4 +1,4 @@
-import { AdditionalDataAddress, AdditionalDataDate, AdditionalDataLearnMore, AdditionalDataNeedsPCCForm } from "@/types/AdditionalDataResponse";
+import { AdditionalDataAddress, AdditionalDataDate, AdditionalDataLearnMore, AdditionalDataNeedsPCCForm, AdditionalDataUserFormData } from "@/types/AdditionalDataResponse";
 import axios from "axios";
 import { makeApiCall } from "./apiConfig";
 
@@ -30,6 +30,14 @@ export async function getParsedLearnMore(
 	messyAddress: string
 ): Promise<AdditionalDataLearnMore> {
 	return await makeApiCall<AdditionalDataLearnMore>(() =>
+		axios.post("api/chat-learnmore", { prompt: messyAddress })
+	);
+}
+
+export async function getParsedUserFormData(
+	messyAddress: string
+): Promise<AdditionalDataUserFormData> {
+	return await makeApiCall<AdditionalDataUserFormData>(() =>
 		axios.post("api/chat-learnmore", { prompt: messyAddress })
 	);
 }
