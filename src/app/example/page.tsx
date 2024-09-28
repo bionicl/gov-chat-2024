@@ -1,7 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
 import { getParsedAddress } from "@/axios/AdditionalData";
-import { AdditionalData } from "@/types/AdditionalDataResponse";
+import { AdditionalDataAddress } from "@/types/AdditionalDataResponse";
 import { Button, Descriptions, DescriptionsProps, Input, Space } from "antd";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ export default function Page() {
 	const [messyValue, setMessyValue] = useState("");
 
 	const [loading, setLoading] = useState(false);
-	const [output, setOutput] = useState<AdditionalData | null>(null);
+	const [output, setOutput] = useState<AdditionalDataAddress | null>(null);
 
 	const items: DescriptionsProps["items"] = [
 		{
