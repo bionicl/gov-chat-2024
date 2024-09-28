@@ -1,6 +1,4 @@
 export type FormUserData = {
-	celZlozenia: string;
-	dataZlozenia: string;
 	kodUrzedu: string;
 	osoba_PESEL: string;
 	osoba_NIP: string;
@@ -17,7 +15,7 @@ export type FormUserData = {
 	adres_nrLokalu: string;
 	adres_kodPocztowy: string;
 	p4: string;
-	p6: string;
+	p6: string; // Cel złożenia deklaracji musi przyjmować wartość: 1 (złożenie deklaracji)
 	p7: string;
 	p20: string;
 	p21: string;

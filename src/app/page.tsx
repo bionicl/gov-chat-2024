@@ -8,6 +8,7 @@ import {
 import ChatArea from "@/components/ChatArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
+import { downloadXML, generateXML } from "@/lib/xmlExport";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
 import { Card, Flex, Typography } from "antd";
@@ -54,6 +55,10 @@ export default function Home() {
 				modifiedFormData[castKey] = value;
 			}
 		}
+
+		// Consants for this case
+		modifiedFormData.p6 = "1"; // Cel złożenia deklaracji musi przyjmować wartość: 1 (złożenie deklaracji)
+
 		setFormData(modifiedFormData);
 	}
 
@@ -82,6 +87,11 @@ export default function Home() {
 				addNewMessage("assistant", result?.response_message, false);
 				updateFormData(result?.userFormData);
 				setLoading(false);
+
+				if (result?.nextMode == "finished"){
+					const xmlString = generateXML(formData);
+					downloadXML(xmlString, "formularzGenerated.xml");
+				}
 			}
 		} catch (error: any) {
 			console.error(error);
