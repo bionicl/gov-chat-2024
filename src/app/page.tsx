@@ -1,10 +1,21 @@
 "use client"; // This is a client component 👈🏽
 
-import ChatMessage from "@/components/ChatMessage";
-import { Button, Card, Flex, Form, Image, Input, Space } from "antd";
+import {
+	Button,
+	Card,
+	Flex,
+	Form,
+	Image,
+	Input,
+	Space,
+	Typography,
+} from "antd";
 import { useState } from "react";
 
+const { Title } = Typography;
+
 export default function Home() {
+	const [messages, setMessages] = useState([]);
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 
@@ -59,14 +70,26 @@ export default function Home() {
 						}}
 					>
 						<Space direction="vertical" style={{ width: "100%" }} size={40}>
-							<ChatMessage role={"user"} />
+							<Title
+								level={3}
+								style={{
+									marginTop: 32,
+									fontFamily: "Montserrat, sans-serif",
+									fontWeight: 700,
+									textAlign: "center",
+								}}
+							>
+								Skorzystaj z pomocy asystenta podatkowego
+							</Title>
+							<Image src={"/images/placeholder_image.png"} preview={false} />
+							{/* <ChatMessage role={"user"} />
 							<ChatMessage role={"assistant"} />
 							<ChatMessage role={"user"} />
 							<ChatMessage role={"assistant"} />
 							<ChatMessage role={"user"} />
 							<ChatMessage role={"assistant"} />
 							<ChatMessage role={"user"} />
-							<ChatMessage role={"assistant"} />
+							<ChatMessage role={"assistant"} /> */}
 							{/* <Card title="Test 1" style={{ width: "100%" }} />
 							<Card title="Test 2" style={{ width: "100%" }} />
 							<Card title="Test 3" style={{ width: "100%" }} />
