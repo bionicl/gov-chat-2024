@@ -1,12 +1,15 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedUserFormData } from "@/axios/AdditionalData";
+import {
+	getParsedNeedPCCForm,
+	getParsedUserFormData,
+} from "@/axios/AdditionalData";
 import ChatArea from "@/components/ChatArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
-import { Card, Flex } from "antd";
+import { Card, Flex, Typography } from "antd";
 import { useState } from "react";
 
 export default function Home() {
@@ -14,7 +17,9 @@ export default function Home() {
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState<Partial<FormUserData>>({});
-	const [mode, setMode] = useState<"start" | "gatherData" | "finished">();
+	const [mode, setMode] = useState<"start" | "gatherData" | "finished">(
+		"start"
+	);
 
 	function addNewMessage(role: "assistant" | "user", content: string) {
 		setMessages((prevMessages) => {
@@ -35,6 +40,13 @@ export default function Home() {
 	async function callApi(message: string) {
 		setLoading(true);
 		try {
+			if (mode === "start") {
+				const result = await getParsedNeedPCCForm(message);
+				addNewMessage("assistant", result?.response_message);
+				if (result.doesNeedThisForm) {
+					setMode("gatherData");
+				}
+			}
 			const result = await getParsedUserFormData(message);
 			// addNewMessage("assistant", result?.userFormData);
 			updateFormData(result?.userFormData);
@@ -62,6 +74,7 @@ export default function Home() {
 	return (
 		<>
 			<TopBar />
+			<Typography.Text type="danger">{mode}</Typography.Text>
 			<Flex
 				align="center"
 				justify="center"
