@@ -1,0 +1,21 @@
+{
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.organizeImports": "explicit",
+		"source.sortMembers": "explicit"
+	},
+	"files.exclude": {
+		"node_modules": true,
+		"package-lock.json": true
+	},
+	"editor.insertSpaces": false,
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
+
+	"prettier.tabWidth": 2,
+	"prettier.useTabs": true,
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	} // This made it finally work for me
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Deklaracja xmlns="http://crd.gov.pl/wzor/2023/12/13/13064/">
+  <Naglowek>
+    <KodFormularza kodSystemowy="PCC-3 (6)" kodPodatku="PCC" rodzajZobowiazania="Z" wersjaSchemy="1-0E">PCC-3</KodFormularza>
+    <WariantFormularza>6</WariantFormularza>
+  </Naglowek>
+  <Podmiot1 rola="Podatnik">
+    <AdresZamieszkaniaSiedziby rodzajAdresu="RAD">
+      <AdresPol>
+        <KodKraju>PL</KodKraju>
+      </AdresPol>
+    </AdresZamieszkaniaSiedziby>
+  </Podmiot1>
+  <PozycjeSzczegolowe>
+    <P_53>0</P_53>
+  </PozycjeSzczegolowe>
+</Deklaracja>
