@@ -1,12 +1,15 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedUserFormData } from "@/axios/AdditionalData";
+import {
+	getParsedNeedPCCForm,
+	getParsedUserFormData,
+} from "@/axios/AdditionalData";
 import ChatArea from "@/components/ChatArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
-import { Card, Flex } from "antd";
+import { Card, Flex, Typography } from "antd";
 import { useState } from "react";
 
 export default function Home() {
@@ -14,7 +17,14 @@ export default function Home() {
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState<Partial<FormUserData>>({});
-	const [mode, setMode] = useState<"start" | "default" | "birthDateCollection" | "addressCollection" | "learnMore" | "finished">("start");
+	const [mode, setMode] = useState<
+		| "start"
+		| "default"
+		| "birthDateCollection"
+		| "addressCollection"
+		| "learnMore"
+		| "finished"
+	>("start");
 
 	function addNewMessage(role: "assistant" | "user", content: string) {
 		setMessages((prevMessages) => {
@@ -26,13 +36,11 @@ export default function Home() {
 		let modifiedFormData = structuredClone(formData);
 
 		// Loop through all elements and override any with non empty strings
-		for (const key in valuesFromGpt) 
-		{
+		for (const key in valuesFromGpt) {
 			const castKey = key as keyof FormUserData;
 			const value = valuesFromGpt[castKey];
-			if (value != "") 
-			{
-				modifiedFormData[castKey] = value
+			if (value != "") {
+				modifiedFormData[castKey] = value;
 			}
 		}
 		setFormData(modifiedFormData);
@@ -41,9 +49,16 @@ export default function Home() {
 	async function callApi(message: string) {
 		setLoading(true);
 		try {
+			if (mode === "start") {
+				const result = await getParsedNeedPCCForm(message);
+				addNewMessage("assistant", result?.response_message);
+				if (result.doesNeedThisForm) {
+					setMode("default");
+				}
+			}
 			const result = await getParsedUserFormData(message);
 			updateFormData(result?.userFormData);
-			console.log(result?.userFormData)
+			console.log(result?.userFormData);
 			addNewMessage("assistant", result?.response_message);
 			setLoading(false);
 		} catch (error: any) {
@@ -69,6 +84,7 @@ export default function Home() {
 	return (
 		<>
 			<TopBar />
+			<Typography.Text type="danger">{mode}</Typography.Text>
 			<Flex
 				align="center"
 				justify="center"
