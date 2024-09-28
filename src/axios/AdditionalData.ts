@@ -1,9 +1,17 @@
-import { AdditionalDataAddress, AdditionalDataDate, AdditionalDataLearnMore, AdditionalDataNeedsPCCForm, AdditionalDataUserFormData } from "@/types/AdditionalDataResponse";
+import {
+	AdditionalDataAddress,
+	AdditionalDataDate,
+	AdditionalDataLearnMore,
+	AdditionalDataNeedsPCCForm,
+	AdditionalDataUserFormData,
+} from "@/types/AdditionalDataResponse";
+import { Message } from "@/types/message";
 import axios from "axios";
 import { makeApiCall } from "./apiConfig";
 
 export async function getParsedAddress(
-	messyAddress: string
+	messyAddress: string,
+	previousInput: Message[]
 ): Promise<AdditionalDataAddress> {
 	return await makeApiCall<AdditionalDataAddress>(() =>
 		axios.post("api/chat-city", { prompt: messyAddress })
@@ -11,33 +19,37 @@ export async function getParsedAddress(
 }
 
 export async function getParsedDate(
-	messyAddress: string
+	messyDate: string,
+	previousInput: Message[]
 ): Promise<AdditionalDataDate> {
 	return await makeApiCall<AdditionalDataDate>(() =>
-		axios.post("api/chat-date", { prompt: messyAddress })
+		axios.post("api/chat-date", { prompt: messyDate })
 	);
 }
 
 export async function getParsedNeedPCCForm(
-	messyAddress: string
+	input: string,
+	previousInput: Message[]
 ): Promise<AdditionalDataNeedsPCCForm> {
 	return await makeApiCall<AdditionalDataNeedsPCCForm>(() =>
-		axios.post("api/chat-needspccform", { prompt: messyAddress })
+		axios.post("api/chat-needspccform", { prompt: input, previousInput })
 	);
 }
 
 export async function getParsedLearnMore(
-	messyAddress: string
+	info: string,
+	previousInput: Message[]
 ): Promise<AdditionalDataLearnMore> {
 	return await makeApiCall<AdditionalDataLearnMore>(() =>
-		axios.post("api/chat-learnmore", { prompt: messyAddress })
+		axios.post("api/chat-learnmore", { prompt: info })
 	);
 }
 
 export async function getParsedUserFormData(
-	messyAddress: string
+	input: string,
+	previousInput: Message[]
 ): Promise<AdditionalDataUserFormData> {
 	return await makeApiCall<AdditionalDataUserFormData>(() =>
-		axios.post("api/chat-learnmore", { prompt: messyAddress })
+		axios.post("api/chat-learnmore", { prompt: input })
 	);
 }

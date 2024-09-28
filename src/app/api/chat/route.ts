@@ -1,3 +1,4 @@
+import { Message } from "@/types/message";
 import { OpenAI } from "openai";
 
 const OPENAI_API_KEY = process.env.OPEN_AI_KEY;
@@ -11,9 +12,15 @@ export async function POST(req: Request) {
 		apiKey: OPENAI_API_KEY,
 	});
 
-	async function generatePrompts(prompt: string) {
+	type Props = {
+		prompt: string;
+		previousInput: Message[];
+	};
+
+	async function generatePrompts(props: Props) {
 		const response = await openai.chat.completions.create({
 			messages: [
+				...props.previousInput,
 				{
 					role: "system",
 					content:
