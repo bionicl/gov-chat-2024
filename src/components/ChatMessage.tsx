@@ -6,6 +6,7 @@ const { useToken } = theme;
 
 type Props = {
 	role: "assistant" | "user";
+	content: string;
 };
 
 const ArrowSvg = ({
@@ -72,7 +73,7 @@ export default function ChatMessage(props: Props) {
 					transform: isUser ? "scale(0.5)" : "scale(0.5) scaleX(-1)",
 				}}
 			/>
-			Message
+			{props.content}
 		</div>
 	);
 }

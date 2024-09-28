@@ -1,5 +1,8 @@
 "use client"; // This is a client component 👈🏽
 
+import { getParsedAddress } from "@/axios/additionalData";
+import ChatMessage from "@/components/ChatMessage";
+import { Message } from "@/types/message";
 import {
 	Button,
 	Card,
@@ -15,15 +18,38 @@ import { useState } from "react";
 const { Title } = Typography;
 
 export default function Home() {
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState<Message[]>([]);
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	async function callApi(message: string) {
+		setLoading(true);
+		try {
+			const result = await getParsedAddress(message);
+			newAssistantMessage(result.address.kraj ?? "Nie wiem");
+		} catch (error: any) {
+			console.error(error);
+			setLoading(false);
+		}
+	}
 
 	function submitMessage() {
 		if (loading) {
 			return;
 		}
+
+		setMessages([...messages, { role: "user", content: inputMessage }]);
+
 		setLoading(true);
+		callApi(inputMessage);
+		setInputMessage("");
+	}
+
+	function newAssistantMessage(content: string) {
+		setMessages((prevMessages) => {
+			return [...prevMessages, { role: "assistant", content }];
+		});
+		setLoading(false);
 	}
 
 	return (
@@ -70,32 +96,38 @@ export default function Home() {
 						}}
 					>
 						<Space direction="vertical" style={{ width: "100%" }} size={40}>
-							<Title
-								level={3}
-								style={{
-									marginTop: 32,
-									fontFamily: "Montserrat, sans-serif",
-									fontWeight: 700,
-									textAlign: "center",
-								}}
-							>
-								Skorzystaj z pomocy asystenta podatkowego
-							</Title>
-							<Image src={"/images/placeholder_image.png"} preview={false} />
-							{/* <ChatMessage role={"user"} />
-							<ChatMessage role={"assistant"} />
-							<ChatMessage role={"user"} />
-							<ChatMessage role={"assistant"} />
-							<ChatMessage role={"user"} />
-							<ChatMessage role={"assistant"} />
-							<ChatMessage role={"user"} />
-							<ChatMessage role={"assistant"} /> */}
-							{/* <Card title="Test 1" style={{ width: "100%" }} />
-							<Card title="Test 2" style={{ width: "100%" }} />
-							<Card title="Test 3" style={{ width: "100%" }} />
-							<Card title="Test 4" style={{ width: "100%" }} />
-							<Card title="Test 5" style={{ width: "100%" }} />
-							<Card title="Test 6" style={{ width: "100%" }} /> */}
+							{messages.length > 0 ? (
+								<>
+									{messages.map((message, index) => {
+										return (
+											<ChatMessage
+												key={index}
+												role={message.role}
+												content={message.content}
+											/>
+										);
+									})}
+								</>
+							) : (
+								<>
+									<Title
+										level={3}
+										style={{
+											marginTop: 32,
+											fontFamily: "Montserrat, sans-serif",
+											fontWeight: 700,
+											textAlign: "center",
+										}}
+									>
+										Skorzystaj z pomocy asystenta podatkowego
+									</Title>
+									<Image
+										src={"/images/placeholder_image.png"}
+										preview={false}
+									/>
+								</>
+							)}
+							{loading && <ChatMessage role={"assistant"} content="..." />}
 						</Space>
 					</div>
 					<Form
@@ -118,6 +150,7 @@ export default function Home() {
 								type="primary"
 								disabled={loading || inputMessage.length === 0}
 								loading={loading}
+								onClick={submitMessage}
 							>
 								Wyślij
 							</Button>
