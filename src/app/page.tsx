@@ -21,6 +21,7 @@ export default function Home() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [inputMessage, setInputMessage] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [formData, setFormData] = useState<Partial<FormData>>({});
 
 	async function callApi(message: string) {
 		setLoading(true);

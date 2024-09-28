@@ -15,6 +15,7 @@ const builder = new XMLBuilder({
 // Function to generate XML with the option to include OsobaFizyczna
 const generateXML = (includeOsobaFizyczna: boolean): string => {
 	// Construct the data object
+
 	const data: any = {
 		Deklaracja: {
 			"@_xmlns": "http://crd.gov.pl/wzor/2023/12/13/13064/", // Namespace
