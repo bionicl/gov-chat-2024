@@ -30,5 +30,5 @@ export type AdditionalDataUserFormData = {
 	response_code: "success" | "need_more_data" | "success_but_unsure" | "failed";
 	response_message: string;
 	nextMode: "default" | "addressCollection" | "learnMore" | "finished";
-	userFormData: FormUserData;
+	userForm: FormUserData;
 };
