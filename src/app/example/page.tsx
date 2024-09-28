@@ -1,7 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedAddress } from "@/axios/AdditionalData";
-import { AdditionalData } from "@/types/AdditionalDataResponse";
+import { getParsedAddress } from "@/axios/additionalData";
+import { AdditionalData } from "@/types/additionalDataResponse";
 import { Button, Descriptions, DescriptionsProps, Input, Space } from "antd";
 import { useState } from "react";
 

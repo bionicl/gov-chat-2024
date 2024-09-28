@@ -1,4 +1,4 @@
-import { AdditionalData } from "@/types/AdditionalDataResponse";
+import { AdditionalData } from "@/types/additionalDataResponse";
 import axios from "axios";
 import { makeApiCall } from "./apiConfig";
 
