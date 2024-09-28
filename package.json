@@ -14,6 +14,7 @@
     "fast-xml-parser": "^4.5.0",
     "js-file-download": "^0.4.12",
     "libxmljs": "^1.0.11",
+    "axios": "^1.7.7",
     "next": "14.2.13",
     "openai": "^4.65.0",
     "react": "^18",
