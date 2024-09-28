@@ -2,24 +2,20 @@ export type FormUserData = {
 	celZlozenia: string;
 	dataZlozenia: string;
 	kodUrzedu: string;
-	osobaFizyczna: {
-		PESEL: string;
-		NIP: string;
-		imie: string;
-		nazwisko: string;
-		dataUrodzenia: string;
-	};
-	adresZamieszkaniaSiedziby: {
-		kodKraju: string;
-		wojewodztwo: string;
-		powiat: string;
-		gmina: string;
-		miejscowosc: string;
-		ulica: string;
-		nrDomu: string;
-		nrLokalu: string;
-		kodPocztowy: string;
-	};
+	osoba_PESEL: string;
+	osoba_NIP: string;
+	osoba_imie: string;
+	osoba_nazwisko: string;
+	osoba_dataUrodzenia: string;
+	adres_kodKraju: string;
+	adres_wojewodztwo: string;
+	adres_powiat: string;
+	adres_gmina: string;
+	adres_miejscowosc: string;
+	adres_ulica: string;
+	adres_nrDomu: string;
+	adres_nrLokalu: string;
+	adres_kodPocztowy: string;
 	p4: string;
 	p6: string;
 	p7: string;
