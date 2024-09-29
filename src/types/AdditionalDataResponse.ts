@@ -32,3 +32,7 @@ export type AdditionalDataUserFormData = {
 	nextMode: "default" | "addressCollection" | "learnMore" | "finished";
 	userForm: FormUserData;
 };
+
+export type AdditionalAddressValidationData = {
+	response_code: string;
+};

@@ -1,8 +1,10 @@
 "use client"; // This is a client component 👈🏽
 
 import {
+	getParsedAddress,
 	getParsedNeedPCCForm,
 	getParsedUserFormData,
+	getParsedValidateAddress
 } from "@/axios/AdditionalData";
 import ChatArea from "@/components/ChatArea";
 import InputArea from "@/components/InputArea";
@@ -82,10 +84,17 @@ export default function Home() {
 				setLoading(false);
 
 				if (result?.nextMode == "finished"){
+					setMode("finished")
 					const xmlString = generateXML(newUserFormData);
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
+				else if (result?.nextMode == "addressCollection"){
+					await callApiAddressCollection("Powiedz że przechodzimy do sekcji o moim adresie zamieszkania i apytaj mnie o dane adresowe potrzebne do wypłeniania danych.");
+				}
+			} else if (mode === "addressCollection"){
+				await callApiAddressCollection(message);
 			}
+			
 			// const result = await getParsedUserFormData(message);
 			// updateFormData(result?.userFormData);
 			// console.log(result?.userFormData);
@@ -95,6 +104,40 @@ export default function Home() {
 			console.error(error);
 			setLoading(false);
 		}
+	}
+
+	async function callApiAddressCollection(message : string){
+				const result = await getParsedAddress(message, currentModeMessages);
+				addNewMessage("assistant", result?.response_message); // ?? napewo w ty przypadku ?
+				setLoading(false);
+
+				const addressValidationResult = await getParsedValidateAddress(
+					result?.address,
+					currentModeMessages
+				);
+
+				if (addressValidationResult.response_code === "ok") {
+					setMode("default");
+					setLoading(true);
+					const result2 = await getParsedUserFormData(
+						"Użytkownik właśnie wypełnił wszystkie pola związane z adresem zamieszkania. I już ich nie musisz wypełniać tą obecną wiadomością ale zapmiętaj."
+						+ "Gmina: " + result?.address.gmina + ", "
+						+ "KodPocztowy: " + result?.address.kod_pocztowy + ", "
+						+ "Kraj: " + result?.address.kraj + ", "
+						+ "Miejscowosc: " + result?.address.miejscowosc + ", "
+						+ "NumerDomu: " + result?.address.numer_domu + ", "
+						+ "NumerMieszkania: " + result?.address.numer_mieszkania + ", "
+						+ "Powiat: " + result?.address.powiat + ", "
+						+ "Ulica: " + result?.address.ulica + ", "
+						+ "Wojewodztwo: " + result?.address.wojewodztwo,	
+						currentModeMessages
+					);
+					addNewMessage("assistant", result2?.response_message);
+					setLoading(false);
+				}
+				else{
+					
+				}
 	}
 
 	function userActionAskQuestion() {
