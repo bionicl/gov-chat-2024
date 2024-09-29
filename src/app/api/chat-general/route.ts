@@ -31,8 +31,10 @@ export async function POST(req: Request) {
 						that object in json empty. Conversation will be in Polish 
 						and please answer in Polish. You can only talk about topics 
 						related to taxes. If information from user you need is about
-						his birth date, address or he asks for knowledge about some topic,
+						his birth date, his/her address or he asks for knowledge about some topic,
 						then set nextMove value in JSON with appropriate value.
+						If you want to get any information about user's address values or user wants to give his address info
+						(like kraj, wojewodztwo, ulica) then set nextMode to addressCollection in JSON.
 						After finished form, make sure to always output finalised JSON.
 						Limit each question about form data to minimum information to not overwhelm 
 						user at once and ensure that your responses are full and complete.

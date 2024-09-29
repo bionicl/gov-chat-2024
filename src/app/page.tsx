@@ -10,6 +10,7 @@ import ChatArea from "@/components/ChatArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
 import { downloadXML, generateXML } from "@/lib/xmlExport";
+import { Address } from "@/types/address";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
 import { Card, Flex, Typography } from "antd";
@@ -55,6 +56,44 @@ export default function Home() {
 		return modifiedFormData;
 	}
 
+	function getUpdatedFormDataFromAddress(address: Address) : Partial<FormUserData> {
+		let modifiedFormData = structuredClone(formData);
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_kodPocztowy = address.kod_pocztowy;
+		}
+		
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_kodKraju = "PL"; //address.kod_pocztowy;
+		}
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_miejscowosc = address.miejscowosc;
+		}
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_nrDomu = address.numer_domu;
+		}
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_nrLokalu = address.numer_mieszkania;
+		}
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_powiat= address.powiat;
+		}
+
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_ulica = address.ulica;
+		}
+		
+		if (modifiedFormData.adres_kodPocztowy != ""){
+			modifiedFormData.adres_wojewodztwo = address.wojewodztwo;
+		}
+		
+		return modifiedFormData;
+	}
+
 	async function callApi(message: string) {
 		setLoading(true);
 		try {
@@ -89,7 +128,8 @@ export default function Home() {
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
 				else if (result?.nextMode == "addressCollection"){
-					await callApiAddressCollection("Powiedz że przechodzimy do sekcji o moim adresie zamieszkania i apytaj mnie o dane adresowe potrzebne do wypłeniania danych.");
+					setMode("addressCollection")
+					await callApiAddressCollection("Powiedz że przechodzimy do sekcji o moim adresie zamieszkania i zapytaj mnie o dane adresowe potrzebne do wypłeniania danych.");
 				}
 			} else if (mode === "addressCollection"){
 				await callApiAddressCollection(message);
@@ -116,9 +156,15 @@ export default function Home() {
 					currentModeMessages
 				);
 
+				console.log(addressValidationResult.response_code);
+
 				if (addressValidationResult.response_code === "ok") {
 					setMode("default");
 					setLoading(true);
+
+					const newUserFormData = getUpdatedFormDataFromAddress(result?.address);
+					setFormData(newUserFormData);
+
 					const result2 = await getParsedUserFormData(
 						"Użytkownik właśnie wypełnił wszystkie pola związane z adresem zamieszkania. I już ich nie musisz wypełniać tą obecną wiadomością ale zapmiętaj."
 						+ "Gmina: " + result?.address.gmina + ", "
@@ -133,10 +179,11 @@ export default function Home() {
 						currentModeMessages
 					);
 					addNewMessage("assistant", result2?.response_message);
+
 					setLoading(false);
 				}
 				else{
-					
+
 				}
 	}
 

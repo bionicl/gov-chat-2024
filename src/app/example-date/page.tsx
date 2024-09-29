@@ -1,6 +1,8 @@
 "use client"; // This is a client component 👈🏽
 
-import { getParsedDate } from "@/axios/AdditionalData";
+import {
+	getParsedValidateAddress
+} from "@/axios/AdditionalData";
 import { AdditionalDataDate } from "@/types/AdditionalDataResponse";
 import { CalendarDate } from "@/types/CalendarDate";
 import { Button, Descriptions, DescriptionsProps, Input, Space } from "antd";
@@ -30,10 +32,19 @@ export default function Page() {
 	async function callApi() {
 		setLoading(true);
 		try {
-			const result = await getParsedDate(messyValue);
-			console.log(typeof result, result);
-			setOutput(result);
-			setLoading(false);
+			const addressValidationResult = await getParsedValidateAddress(
+				{ kraj: "Polska",
+					wojewodztwo: "Mazowieckie",
+					powiat: "Warszawa",
+					gmina: "Mokotów",
+					miejscowosc: "Warszawa",
+					ulica: "Ul. Słoneczna",
+					numer_domu: "12",
+					numer_mieszkania: "3A",
+					kod_pocztowy: "02-100" },
+				[]
+			);
+				console.log(addressValidationResult.response_code);
 		} catch (error: any) {
 			console.error(error);
 			setLoading(false);
