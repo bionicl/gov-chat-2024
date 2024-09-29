@@ -19,6 +19,8 @@ export const generateXML = (userForm: Partial<FormUserData>): string => {
 
 	console.log("Hello: " + userForm.osoba_imie);
 
+	const price = parseInt(userForm.p26 ?? "0");
+
 	const data: any = {
 		Deklaracja: {
 			"@_xmlns": "http://crd.gov.pl/wzor/2023/12/13/13064/", // Namespace
@@ -45,13 +47,13 @@ export const generateXML = (userForm: Partial<FormUserData>): string => {
 				"@_rola": "Podatnik",
 				...(true // replace with includeOsobaFizyczna
 					? {
-						OsobaFizyczna: {
-							PESEL: userForm.osoba_PESEL,
-							ImiePierwsze: userForm.osoba_imie,
-							Nazwisko: userForm.osoba_nazwisko,
-							DataUrodzenia: userForm.osoba_dataUrodzenia,
-						},
-					}
+							OsobaFizyczna: {
+								PESEL: userForm.osoba_PESEL,
+								ImiePierwsze: userForm.osoba_imie,
+								Nazwisko: userForm.osoba_nazwisko,
+								DataUrodzenia: userForm.osoba_dataUrodzenia,
+							},
+					  }
 					: {}),
 				AdresZamieszkaniaSiedziby: {
 					"@_rodzajAdresu": "RAD",
@@ -70,17 +72,17 @@ export const generateXML = (userForm: Partial<FormUserData>): string => {
 			},
 			PozycjeSzczegolowe: {
 				P_7: userForm.p7,
-				P_20: userForm.p20,
+				P_20: 1,
 				P_21: userForm.p21,
 				P_22: userForm.p22,
 				P_23: userForm.p23,
-				P_26: userForm.p26,
-				P_27: userForm.p27,
-				P_46: userForm.p46,
-				P_53: userForm.p53,
-				P_62: userForm.p62,
+				P_26: price,
+				P_27: Math.round(price * 0.02),
+				P_46: Math.round(price * 0.02),
+				P_53: Math.round(price * 0.02),
+				P_62: 1,
 			},
-			Pouczenia: userForm.pouczenia,
+			Pouczenia: 1,
 		},
 	};
 

@@ -1,16 +1,20 @@
 "use client"; // This is a client component 👈🏽
 
 import {
+	getParsedLearnMore,
 	getParsedNeedPCCForm,
 	getParsedUserFormData,
 } from "@/axios/AdditionalData";
 import ChatArea from "@/components/ChatArea";
+import FormDetailsArea from "@/components/FormDetailsArea";
 import InputArea from "@/components/InputArea";
 import TopBar from "@/components/TopBar";
 import { downloadXML, generateXML } from "@/lib/xmlExport";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
 import { Card, Flex, Typography } from "antd";
+import { XMLBuilder } from "fast-xml-parser";
+import fileDownload from "js-file-download";
 import { useState } from "react";
 
 export default function Home() {
@@ -28,13 +32,19 @@ export default function Home() {
 		| "finished"
 	>("start");
 
-	function addNewMessage(role: "assistant" | "user", content: string) {
+	function addNewMessage(
+		role: "assistant" | "user",
+		content: string,
+		ignoreHistory: boolean
+	) {
 		setMessages((prevMessages) => {
 			return [...prevMessages, { role, content }];
 		});
-		setCurrentModeMessages((prevMessages) => {
-			return [...prevMessages, { role, content }];
-		});
+		if (!ignoreHistory) {
+			setCurrentModeMessages((prevMessages) => {
+				return [...prevMessages, { role, content }];
+			});
+		}
 	}
 
 	function getUpdatedFormData(
@@ -60,16 +70,19 @@ export default function Home() {
 		try {
 			if (mode === "start") {
 				const result = await getParsedNeedPCCForm(message, currentModeMessages);
-				addNewMessage("assistant", result?.response_message);
+				addNewMessage("assistant", result?.response_message, false);
 				setLoading(false);
 				if (result.doesNeedThisForm) {
 					setMode("default");
 					setLoading(true);
-					const result = await getParsedUserFormData(
+					const result2 = await getParsedUserFormData(
 						"Chciałbym kupić samochód. Czy możesz pomóc mi wypełnić formularz pcc-3?",
-						currentModeMessages
+						[
+							{ role: "user", content: message },
+							{ role: "assistant", content: result?.response_message },
+						]
 					);
-					addNewMessage("assistant", result?.response_message);
+					addNewMessage("assistant", result2?.response_message, false);
 					setLoading(false);
 				}
 			} else if (mode === "default") {
@@ -77,24 +90,36 @@ export default function Home() {
 					message,
 					currentModeMessages
 				);
-				addNewMessage("assistant", result?.response_message);
-				console.log(result);
+				addNewMessage("assistant", result?.response_message, false);
 				const newUserFormData = getUpdatedFormData(result?.userForm);
 				setFormData(newUserFormData);
 				setLoading(false);
 
 				if (result?.nextMode == "finished") {
-					setMode("finished");
 					const xmlString = generateXML(newUserFormData);
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
 			}
+		} catch (error: any) {
+			console.error(error);
+			setLoading(false);
+		}
+	}
 
-			// const result = await getParsedUserFormData(message);
-			// updateFormData(result?.userFormData);
-			// console.log(result?.userFormData);
-			// addNewMessage("assistant", result?.response_message);
-			// setLoading(false);
+	async function explain(content: string) {
+		setLoading(true);
+		try {
+			const result = await getParsedLearnMore(
+				"Wytłumacz tą kwestię: " + content,
+				currentModeMessages
+			);
+			let message = result?.response_message;
+			if (result?.href && result?.href !== "") {
+				message =
+					message + "\nDowiedz się więcej na tej stronie:\n" + result?.href;
+			}
+			addNewMessage("assistant", result?.response_message, true);
+			setLoading(false);
 		} catch (error: any) {
 			console.error(error);
 			setLoading(false);
@@ -107,7 +132,7 @@ export default function Home() {
 		}
 
 		// Add user message
-		addNewMessage("user", inputMessage);
+		addNewMessage("user", inputMessage, false);
 		setInputMessage("");
 
 		// Send API request
@@ -115,31 +140,52 @@ export default function Home() {
 		callApi(inputMessage);
 	}
 
+	function downloadChatHistory() {
+		const builder = new XMLBuilder({
+			ignoreAttributes: false, // Set to true to ignore attributes
+			format: true, // Format the output
+		});
+		const xml = builder.build(messages);
+		fileDownload(xml, "Historia chatu: " + new Date().toISOString() + ".xml");
+	}
+
+	const isStartMode = mode === "start";
+
 	return (
 		<>
 			<TopBar />
-			<Typography.Text type="danger">{mode}</Typography.Text>
+			<Typography.Text
+				type="danger"
+				style={{ position: "fixed", top: 160, left: 16 }}
+			>
+				{mode}
+			</Typography.Text>
 			<Flex
 				align="center"
 				justify="center"
 				style={{ height: "calc(100vh - 96px)", width: "100vw" }}
 			>
-				<Card
-					style={{
-						width: 600,
-						height: "calc(100% - 96px)",
-						position: "relative",
-					}}
-					bordered={false}
-				>
-					<ChatArea messages={messages} loading={loading} />
-					<InputArea
-						inputMessage={inputMessage}
-						setInputMessage={setInputMessage}
-						loading={loading}
-						userActionAskQuestion={userActionAskQuestion}
-					/>
-				</Card>
+				<Flex gap={16}>
+					{!isStartMode && <FormDetailsArea formData={formData} />}
+					<Card
+						style={{
+							width: 600,
+							height: "calc(100% - 96px)",
+							position: "relative",
+						}}
+						bordered={false}
+					>
+						<ChatArea messages={messages} loading={loading} explain={explain} />
+						<InputArea
+							inputMessage={inputMessage}
+							setInputMessage={setInputMessage}
+							loading={loading}
+							userActionAskQuestion={userActionAskQuestion}
+							downloadChatHistory={downloadChatHistory}
+							messagesLength={messages.length}
+						/>
+					</Card>
+				</Flex>
 			</Flex>
 		</>
 	);

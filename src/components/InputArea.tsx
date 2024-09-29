@@ -1,10 +1,13 @@
-import { Button, Flex, Form, Input } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { Button, Flex, Form, Input, Tooltip } from "antd";
 
 type Props = {
 	loading: boolean;
 	userActionAskQuestion: () => void;
 	setInputMessage: React.Dispatch<React.SetStateAction<string>>;
 	inputMessage: string;
+	downloadChatHistory(): void;
+	messagesLength: number;
 };
 
 export default function InputArea(props: Props) {
@@ -32,6 +35,14 @@ export default function InputArea(props: Props) {
 				>
 					Wyślij
 				</Button>
+				<Tooltip title="Pobierz historię chatu">
+					<Button
+						disabled={props.messagesLength === 0}
+						style={{ height: 40, paddingInline: 24 }}
+						icon={<DownloadOutlined />}
+						onClick={props.downloadChatHistory}
+					/>
+				</Tooltip>
 			</Flex>
 		</Form>
 	);

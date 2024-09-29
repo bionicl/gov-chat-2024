@@ -8,11 +8,15 @@ import { CalendarDate } from "@/types/CalendarDate";
 import { Button, Descriptions, DescriptionsProps, Input, Space } from "antd";
 import { useState } from "react";
 
-function GetStringFromCalendarDate(calendarDate : CalendarDate | undefined) : string | undefined {
-	if (calendarDate == undefined){
+function GetStringFromCalendarDate(
+	calendarDate: CalendarDate | undefined
+): string | undefined {
+	if (calendarDate == undefined) {
 		return "";
 	}
-	return (calendarDate.rok + "-" + calendarDate.miesiac + "-" + calendarDate.dzien);
+	return (
+		calendarDate.rok + "-" + calendarDate.miesiac + "-" + calendarDate.dzien
+	);
 }
 
 export default function Page() {

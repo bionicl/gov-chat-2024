@@ -1,5 +1,6 @@
 import { Message } from "@/types/message";
 import { Image, Space, Typography } from "antd";
+import { useEffect, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 
 const { Title } = Typography;
@@ -7,11 +8,22 @@ const { Title } = Typography;
 type Props = {
 	messages: Message[];
 	loading: boolean;
+	explain: (content: string) => void;
 };
 
 export default function ChatArea(props: Props) {
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		// Scroll to bottom when messages change
+		if (containerRef.current) {
+			containerRef.current.scrollTop = containerRef.current.scrollHeight;
+		}
+	}, [props.messages]);
+
 	return (
 		<div
+			ref={containerRef}
 			style={{
 				height: "calc(100vh - 96px - 96px - 48px - 16px - 40px)",
 				overflowY: "scroll",
@@ -27,6 +39,8 @@ export default function ChatArea(props: Props) {
 									key={index}
 									role={message.role}
 									content={message.content}
+									explain={props.explain}
+									loading={false}
 								/>
 							);
 						})}
@@ -37,7 +51,7 @@ export default function ChatArea(props: Props) {
 							level={3}
 							style={{
 								marginTop: 32,
-								fontFamily: "Montserrat, sans-serif",
+
 								fontWeight: 700,
 								textAlign: "center",
 							}}
@@ -47,7 +61,14 @@ export default function ChatArea(props: Props) {
 						<Image src={"/images/placeholder_image.png"} preview={false} />
 					</>
 				)}
-				{props.loading && <ChatMessage role={"assistant"} content="..." />}
+				{props.loading && (
+					<ChatMessage
+						role={"assistant"}
+						content="..."
+						explain={props.explain}
+						loading
+					/>
+				)}
 			</Space>
 		</div>
 	);

@@ -34,6 +34,7 @@ export default function RootLayout({
 							token: {
 								colorPrimary: "rgb(1, 84, 151)",
 								borderRadius: 4.8,
+								fontFamily: "Montserrat, sans-serif",
 							},
 						}}
 					>
