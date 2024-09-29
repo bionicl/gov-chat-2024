@@ -104,12 +104,12 @@ export default function FormDetailsArea(props: Props) {
 		},
 		{
 			key: "3",
-			label: "Miejsce dokonania czynności cywilnoprawnej",
+			label: "Miejsce dokonania czynności",
 			children: props.formData.p22,
 		},
 		{
 			key: "4",
-			label: "Opis samochodu",
+			label: "Opis",
 			children: props.formData.p23,
 		},
 		{
