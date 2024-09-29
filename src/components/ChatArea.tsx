@@ -40,6 +40,7 @@ export default function ChatArea(props: Props) {
 									role={message.role}
 									content={message.content}
 									explain={props.explain}
+									loading={false}
 								/>
 							);
 						})}
@@ -65,6 +66,7 @@ export default function ChatArea(props: Props) {
 						role={"assistant"}
 						content="..."
 						explain={props.explain}
+						loading
 					/>
 				)}
 			</Space>

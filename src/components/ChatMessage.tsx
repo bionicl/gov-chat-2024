@@ -1,7 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
-import { QuestionCircleFilled } from "@ant-design/icons";
-import { theme, Tooltip } from "antd";
+import { LoadingOutlined, QuestionCircleFilled } from "@ant-design/icons";
+import { Space, Spin, theme, Tooltip } from "antd";
 import React from "react";
 const { useToken } = theme;
 
@@ -9,6 +9,7 @@ type Props = {
 	role: "assistant" | "user";
 	content: string;
 	explain: (content: string) => void;
+	loading: boolean;
 };
 
 const ArrowSvg = ({
@@ -56,6 +57,7 @@ export default function ChatMessage(props: Props) {
 
 	return (
 		<div
+			className={props.loading ? "fade-box" : ""}
 			style={{
 				backgroundColor: isUser ? token.colorPrimary : "#999",
 				color: "white",
@@ -75,16 +77,24 @@ export default function ChatMessage(props: Props) {
 					transform: isUser ? "scale(0.5)" : "scale(0.5) scaleX(-1)",
 				}}
 			/>
-			{props.content}
-			{props.role === "assistant" && props.content.length >= 5 && (
-				<Tooltip title="Wyjaśnij...">
-					<QuestionCircleFilled
-						onClick={() => props.explain(props.content)}
-						className="opacity-on-hover"
-						style={{ marginLeft: 8 }}
-					/>
-				</Tooltip>
+			{props.loading ? (
+				<Space>
+					<Spin indicator={<LoadingOutlined spin />} /> Przetwarzanie...
+				</Space>
+			) : (
+				props.content
 			)}
+			{props.role === "assistant" &&
+				props.content.length >= 5 &&
+				props.loading === false && (
+					<Tooltip title="Wyjaśnij...">
+						<QuestionCircleFilled
+							onClick={() => props.explain(props.content)}
+							className="opacity-on-hover"
+							style={{ marginLeft: 8 }}
+						/>
+					</Tooltip>
+				)}
 		</div>
 	);
 }
