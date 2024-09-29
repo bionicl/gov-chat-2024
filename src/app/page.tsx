@@ -13,6 +13,8 @@ import { downloadXML, generateXML } from "@/lib/xmlExport";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
 import { Card, Flex, Typography } from "antd";
+import { XMLBuilder } from "fast-xml-parser";
+import fileDownload from "js-file-download";
 import { useState } from "react";
 
 export default function Home() {
@@ -135,6 +137,15 @@ export default function Home() {
 		callApi(inputMessage);
 	}
 
+	function downloadChatHistory() {
+		const builder = new XMLBuilder({
+			ignoreAttributes: false, // Set to true to ignore attributes
+			format: true, // Format the output
+		});
+		const xml = builder.build(messages);
+		fileDownload(xml, "Historia chatu: " + new Date().toISOString() + ".xml");
+	}
+
 	const isStartMode = mode === "start";
 
 	return (
@@ -167,6 +178,8 @@ export default function Home() {
 							setInputMessage={setInputMessage}
 							loading={loading}
 							userActionAskQuestion={userActionAskQuestion}
+							downloadChatHistory={downloadChatHistory}
+							messagesLength={messages.length}
 						/>
 					</Card>
 				</Flex>

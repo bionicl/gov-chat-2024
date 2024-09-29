@@ -212,6 +212,7 @@ export default function FormDetailsArea(props: Props) {
 				<Title level={3}>Postęp wypełnienia formularza</Title>
 				<Collapse items={items} defaultActiveKey={["1"]} />
 			</div>
+			{/* <div style={{ marginTop: 16, height: 40 }}>test</div> */}
 		</Card>
 	);
 }
