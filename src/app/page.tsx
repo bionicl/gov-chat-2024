@@ -45,7 +45,9 @@ export default function Home() {
 		}
 	}
 
-	function getUpdatedFormData(valuesFromGpt: FormUserData) : Partial<FormUserData> {
+	function getUpdatedFormData(
+		valuesFromGpt: FormUserData
+	): Partial<FormUserData> {
 		let modifiedFormData = structuredClone(formData);
 		// Loop through all elements and override any with non empty strings
 		for (const key in valuesFromGpt) {
@@ -88,7 +90,7 @@ export default function Home() {
 				setFormData(newUserFormData);
 				setLoading(false);
 
-				if (result?.nextMode == "finished"){
+				if (result?.nextMode == "finished") {
 					const xmlString = generateXML(newUserFormData);
 					downloadXML(xmlString, "formularzGenerated.xml");
 				}
@@ -138,17 +140,22 @@ export default function Home() {
 	return (
 		<>
 			<TopBar />
-			<Typography.Text type="danger">{mode}</Typography.Text>
+			<Typography.Text
+				type="danger"
+				style={{ position: "fixed", top: 160, left: 16 }}
+			>
+				{mode}
+			</Typography.Text>
 			<Flex
 				align="center"
 				justify="center"
 				style={{ height: "calc(100vh - 96px)", width: "100vw" }}
 			>
 				<Flex gap={16}>
-					{!isStartMode && <FormDetailsArea />}
+					{!isStartMode && <FormDetailsArea formData={formData} />}
 					<Card
 						style={{
-							width: isStartMode ? 600 : 450,
+							width: 600,
 							height: "calc(100% - 96px)",
 							position: "relative",
 						}}

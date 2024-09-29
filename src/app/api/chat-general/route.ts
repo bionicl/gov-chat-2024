@@ -63,7 +63,6 @@ export async function POST(req: Request) {
 							userForm: {
 								type: "object",
 								properties: {
-
 									kodUrzedu: {
 										type: "string",
 										description: "Office code. Pole obowiązkowe. Ważne pole.",
@@ -87,7 +86,8 @@ export async function POST(req: Request) {
 									},
 									osoba_dataUrodzenia: {
 										type: "string",
-										description: "Date of birth (format: YYYY-MM-DD) but ask user without any specific format (but internally convert it at output to (format: YYYY-MM-DD))",
+										description:
+											"Date of birth (format: YYYY-MM-DD) but ask user without any specific format (but internally convert it at output to (format: YYYY-MM-DD))",
 									},
 									adres_kodKraju: {
 										type: "string",
@@ -132,7 +132,8 @@ export async function POST(req: Request) {
 									},
 									p7: {
 										type: "string",
-										description: "PODMIOT SKŁADAJĄCY DEKLARACJĘ. Pole obowiązkowe. Musi przyjmować wartość: 1 (podmiot zobowiązany solidarnie do zapłaty podatku), lub 5 (inny podmiot).",
+										description:
+											"PODMIOT SKŁADAJĄCY DEKLARACJĘ. Pole obowiązkowe. Musi przyjmować wartość: 1 (podmiot zobowiązany solidarnie do zapłaty podatku), lub 5 (inny podmiot).",
 									},
 									p20: {
 										type: "string",
