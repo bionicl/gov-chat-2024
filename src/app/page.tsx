@@ -12,7 +12,7 @@ import TopBar from "@/components/TopBar";
 import { downloadXML, generateXML } from "@/lib/xmlExport";
 import { FormUserData } from "@/types/formData";
 import { Message } from "@/types/message";
-import { Card, Flex, Typography } from "antd";
+import { Card, Flex } from "antd";
 import { XMLBuilder } from "fast-xml-parser";
 import fileDownload from "js-file-download";
 import { useState } from "react";
@@ -154,12 +154,12 @@ export default function Home() {
 	return (
 		<>
 			<TopBar />
-			<Typography.Text
+			{/* <Typography.Text
 				type="danger"
 				style={{ position: "fixed", top: 160, left: 16 }}
 			>
 				{mode}
-			</Typography.Text>
+			</Typography.Text> */}
 			<Flex
 				align="center"
 				justify="center"
