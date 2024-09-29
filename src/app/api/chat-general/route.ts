@@ -45,8 +45,16 @@ export async function POST(req: Request) {
 						2. Pesel/NIP
 						3. Birth date
 						4. Address (DO NOT CONFIRM DATA WITH THE USER, GO ON WITH THE SCRIPT)
+						It needs to be address in Poland. User needs to input Powiat, Gmina, Miejscowośc, Street (optional), home number and optional room number and postal code. If any of those fields are not provided, then output additional message in polish that indicates which data is missing. Try to help with filling out some data. For example if user provides a big city, autofill powiat/gmina/wojewódźtwo but only if you are 100% sure. If you fill them out automatically, If provided data if wrong (for example kod pocztowy is longer than 5 characters), try to fix it or return failed status and notify in the message. If Kod pocztowy is provided without the - character, fill it out with the correct format 00-000. Kraj, Województwo, Powiat and Gmina, output always in UPPERLETTERS. Odpowiadaj tylko na tematy związane z podatkami.
+						Oto przykłady nazw powiatów: "M. RADOM", "MIŃSKI", "MAKOWSKI", "M. ST. WARSZAWA", "M. SIEDLCE", "GARWOLIŃSKI", "OTWOCKI",
+						Oto przykłady nazw gmin: "CEGŁÓW", "DOBRE", "MIŃSK MAZOWIECKI-MIEJSKA", "MIŃSK MAZOWIECKI-WIEJSKA", "MROZY", "M. ST. WARSZAWA", "KRAKOWSKI", "M. KRAKÓW", 
+
+
+
 						5. Details about purchase
 						6. Other details like urzad skarbowy
+
+						lookout for previous messages, maybe user has already filled out some of the info there! In such case no need to ask, try to fill them out automatically
 
 						NEVER OUTPUT EMPTY MESSAGE
 
@@ -463,7 +471,7 @@ export async function POST(req: Request) {
 				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
-			max_tokens: 1000,
+			// max_tokens: 1000,
 			response_format: {
 				type: "json_schema",
 				json_schema: {

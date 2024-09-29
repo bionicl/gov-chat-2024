@@ -75,11 +75,14 @@ export default function Home() {
 				if (result.doesNeedThisForm) {
 					setMode("default");
 					setLoading(true);
-					const result = await getParsedUserFormData(
+					const result2 = await getParsedUserFormData(
 						"Chciałbym kupić samochód. Czy możesz pomóc mi wypełnić formularz pcc-3?",
-						currentModeMessages
+						[
+							{ role: "user", content: message },
+							{ role: "assistant", content: result?.response_message },
+						]
 					);
-					addNewMessage("assistant", result?.response_message, false);
+					addNewMessage("assistant", result2?.response_message, false);
 					setLoading(false);
 				}
 			} else if (mode === "default") {

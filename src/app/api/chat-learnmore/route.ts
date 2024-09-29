@@ -125,7 +125,7 @@ export async function POST(req: Request) {
 				{ role: "user", content: body.prompt },
 			],
 			model: "gpt-4o-mini",
-			max_tokens: 1000,
+			// max_tokens: 1000,
 			response_format: {
 				type: "json_schema",
 				json_schema: {
