@@ -1,24 +1,12 @@
 import {
-	AdditionalAddressValidationData,
-	AdditionalDataAddress,
 	AdditionalDataDate,
 	AdditionalDataLearnMore,
 	AdditionalDataNeedsPCCForm,
-	AdditionalDataUserFormData
+	AdditionalDataUserFormData,
 } from "@/types/AdditionalDataResponse";
-import { Address } from "@/types/address";
 import { Message } from "@/types/message";
 import axios from "axios";
 import { makeApiCall } from "./apiConfig";
-
-export async function getParsedAddress(
-	messyAddress: string,
-	previousInput: Message[]
-): Promise<AdditionalDataAddress> {
-	return await makeApiCall<AdditionalDataAddress>(() =>
-		axios.post("api/chat-city", { prompt: messyAddress, previousInput })
-	);
-}
 
 export async function getParsedDate(
 	messyDate: string,
@@ -53,14 +41,5 @@ export async function getParsedUserFormData(
 ): Promise<AdditionalDataUserFormData> {
 	return await makeApiCall<AdditionalDataUserFormData>(() =>
 		axios.post("api/chat-general", { prompt: input, previousInput })
-	);
-}
-
-export async function getParsedValidateAddress(
-	address: Address,
-	previousInput: Message[]
-): Promise<AdditionalAddressValidationData> {
-	return await makeApiCall<AdditionalAddressValidationData>(() =>
-		axios.post("api/region-data", { address: address, previousInput })
 	);
 }
